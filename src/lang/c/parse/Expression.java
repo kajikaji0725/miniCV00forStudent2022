@@ -6,7 +6,7 @@ import lang.*;
 import lang.c.*;
 
 public class Expression extends CParseRule {
-	// expression ::= term { expressionAdd }
+	// expression ::= term { expressionAdd | expressionSub }
 	private CParseRule expression;
 
 	public Expression(CParseContext pcx) {
@@ -118,7 +118,7 @@ class ExpressionAdd extends CParseRule {
 }
 
 class ExpressionSub extends CParseRule {
-	// expressionAdd ::= '+' term
+	// expressionSub ::= '-' term
 	private CToken op;
 	private CParseRule left, right;
 
@@ -134,7 +134,7 @@ class ExpressionSub extends CParseRule {
 		// ここにやってくるときは、必ずisFirst()が満たされている
 		CTokenizer ct = pcx.getTokenizer();
 		op = ct.getCurrentToken(pcx);
-		// +の次の字句を読む
+		// -の次の字句を読む
 		CToken tk = ct.getNextToken(pcx);
 		if (Term.isFirst(tk)) {
 			right = new Term(pcx);
@@ -173,7 +173,7 @@ class ExpressionSub extends CParseRule {
 			right.codeGen(pcx); // 右部分木のコード生成を頼む
 			o.println("\tMOV\t-(R6), R0\t; ExpressionSub: ２数を取り出して、減算し、積む<" + op.toString() + ">");
 			o.println("\tMOV\t-(R6), R1\t; ExpressionSub:");
-			o.println("\tSUB\tR0, R1\t; ExpressionSub:");
+			o.println("\tSUB\tR0, R1\t; ExpressionSub:"); //前回計算した数、または左部分の数はR1に入っているため、R1からR0を引き算した数をR1に格納する。
 			o.println("\tMOV\tR0, (R6)+\t; ExpressionSub:");
 		}
 	}
