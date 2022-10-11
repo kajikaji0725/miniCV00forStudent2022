@@ -1,5 +1,9 @@
 package lang.c;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -76,8 +80,12 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 
 		StringBuffer text = new StringBuffer();
 
+		Character[] useOpe = { '+', '-', '/', '*', '&' }; // 使用する四則演算子
+
 		int state = 0;
 		boolean accept = false;
+		Boolean errFlag = false;
+		Set<Character> errChar = new HashSet<Character>();
 		while (!accept) {
 			switch (state) {
 				case 0: // 初期状態
@@ -92,6 +100,18 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 						startCol = colNo - 1;
 						text.append(ch);
 						state = 3;
+						if (text.length() == 1) {
+							if (ch == '0') {
+								state = 7;
+							}
+							char xChar = readChar();
+							if (xChar == 'x') {
+								text.append(xChar);
+								state = 8;
+							} else {
+								backChar(xChar);
+							}
+						}
 					} else if (ch == '+') {
 						startCol = colNo - 1;
 						text.append(ch);
@@ -100,6 +120,10 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 						startCol = colNo - 1;
 						text.append(ch);
 						state = 5;
+					} else if (ch == '&') {
+						startCol = colNo - 1;
+						text.append(ch);
+						state = 3; // &のあとが10進数の場合のみ対応
 					} else { // ヘンな文字を読んだ
 						startCol = colNo - 1;
 						text.append(ch);
@@ -119,10 +143,31 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 					if (Character.isDigit(ch)) {
 						text.append(ch);
 					} else {
-						// 数の終わり
-						backChar(ch); // 数を表さない文字は戻す（読まなかったことにする）
-						tk = new CToken(CToken.TK_NUM, lineNo, startCol, text.toString());
-						accept = true;
+						if (!Arrays.asList(useOpe).contains(ch) && ch != (char) -1) { // 四則演算が来た場合は数の終わりとする。
+							text.append(ch);
+							errChar.add(ch);
+							errFlag = true;
+						} else {
+							// 数の終わり
+							backChar(ch); // 数を表さない文字は戻す（読まなかったことにする)
+							if (errFlag) {
+								System.err.println(errChar + " は10進数では使えません");
+								state = 2;
+							}
+							if (text.charAt(0) == '&' && text.charAt(0) != '&'
+									&& Integer.valueOf(text.toString()) > (int) Math.pow(2, 15) - 1) {
+								System.err.println("16ビット符号付整数内に収めてください");
+								state = 2;
+							}
+							if (text.charAt(0) == '&') {
+								tk = new CToken(CToken.TK_AMP, lineNo, startCol, text.toString());
+								accept = true;
+							} else {
+								tk = new CToken(CToken.TK_NUM, lineNo, startCol, text.toString());
+								accept = true;
+							}
+
+						}
 					}
 					break;
 				case 4: // +を読んだ
@@ -150,9 +195,9 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 								}
 							}
 							if (ch == (char) -1) {
-									System.err.println("コメントアウトを閉じずに終了");
-									state = 1;
-									commentFlag = true;
+								System.err.println("コメントアウトを閉じずに終了");
+								state = 1;
+								commentFlag = true;
 							}
 						}
 					} else if (ch == '/') { // コメントアウト//
@@ -164,9 +209,65 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 								backChar(ch);
 							}
 							if (ch == (char) -1) {
+								System.out.println("hoge");
 								commentFlag = true;
 								state = 1;
 							}
+						}
+					} else {
+						backChar(ch);
+						text.append('/');
+						state = 2;
+					}
+					break;
+				case 7: // 8進数計算
+					ch = readChar();
+					if (Character.isDigit(ch)) {
+						if (ch >= '8') {
+							errChar.add(ch);
+							errFlag = true;
+						}
+						text.append(ch);
+					} else {
+						// 数の終わり
+						backChar(ch); // 数を表さない文字は戻す（読まなかったことにする)
+						if (text.length() > 7
+								|| (text.length() == 7 && (text.charAt(1) >= '2' && text.charAt(1) <= '7'))) {
+							System.err.println("16ビット内に収めてください");
+							state = 2;
+						} else if (errFlag) {
+							System.err.println(errChar + " は8進数では使えません");
+							state = 2;
+						} else {
+							tk = new CToken(CToken.TK_NUM, lineNo, startCol, text.toString());
+							accept = true;
+						}
+					}
+					break;
+				case 8: // 16進数計算
+					ch = readChar();
+					if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f')) {
+
+						text.append(ch);
+					} else if (ch > 'f' && ch != (char) -1) {
+						text.append(ch);
+						errChar.add(ch);
+						errFlag = true;
+					} else {
+						// 数の終わり
+						backChar(ch); // 数を表さない文字は戻す（読まなかったことにする)
+						if (text.length() > 6) {
+							System.err.println("16ビット内に収めてください");
+							state = 2;
+						} else if (errFlag) {
+							System.err.println(errChar + " は16進数では使えません");
+							state = 2;
+						} else if (text.length() == 2) {
+							System.err.println("不正な16進数の表記です");
+							state = 2;
+						} else {
+							tk = new CToken(CToken.TK_NUM, lineNo, startCol, text.toString());
+							accept = true;
 						}
 					}
 					break;
