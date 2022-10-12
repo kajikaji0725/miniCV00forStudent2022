@@ -12,6 +12,7 @@ public class MiniCompiler {
 		try {
 			CTokenizer ct = pcx.getTokenizer();
 			CToken tk = ct.getNextToken(pcx);
+			System.out.println();
 			if (Program.isFirst(tk)) {
 				CParseRule parseTree = new Program(pcx);
 				parseTree.parse(pcx);									// 構文解析

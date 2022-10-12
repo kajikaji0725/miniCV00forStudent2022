@@ -13,12 +13,12 @@ public class Factor extends CParseRule {
 	}
 
 	public static boolean isFirst(CToken tk) {
-		return Number.isFirst(tk);
+		return Number.isFirst(tk) | FactorAmp.isFirst(tk);
 	}
 
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
-		if (pcx.getTokenizer().getCurrentToken(pcx).getText().charAt(0) == '&') {
+		if (FactorAmp.isFirst(pcx.getTokenizer().getCurrentToken(pcx))) {
 			number = new FactorAmp(pcx);
 			number.parse(pcx);
 		} else {
@@ -72,7 +72,8 @@ class FactorAmp extends CParseRule {
 		PrintStream o = pcx.getIOContext().getOutStream();
 		o.println(";;; number starts");
 		if (num != null) {
-			o.println("\tMOV\t#" + num.getText() + ", (R6)+\t; Number: 数を積む<" + num.toExplainString() + ">");
+			o.println("\tMOV\t#" + num.getText() + ", (R6)+\t; Number: 数を積む<" +
+					num.toExplainString() + ">");
 		}
 		o.println(";;; number completes");
 	}
