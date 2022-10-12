@@ -23,18 +23,19 @@ public class Expression extends CParseRule {
 		term.parse(pcx);
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
-		while (ExpressionAdd.isFirst(tk)) {
-			list = new ExpressionAdd(pcx, term);
+		while (true) {
+			if (ExpressionAdd.isFirst(tk)) {
+				list = new ExpressionAdd(pcx, term);
+			} else if (ExpressionSub.isFirst(tk)) {
+				list = new ExpressionSub(pcx, term);
+			} else {
+				break;
+			}
 			list.parse(pcx);
 			term = list;
 			tk = ct.getCurrentToken(pcx);
 		}
-		while (ExpressionSub.isFirst(tk)) {
-			list = new ExpressionSub(pcx, term);
-			list.parse(pcx);
-			term = list;
-			tk = ct.getCurrentToken(pcx);
-		}
+		
 		expression = term;
 	}
 
@@ -173,7 +174,7 @@ class ExpressionSub extends CParseRule {
 			right.codeGen(pcx); // 右部分木のコード生成を頼む
 			o.println("\tMOV\t-(R6), R0\t; ExpressionSub: ２数を取り出して、減算し、積む<" + op.toString() + ">");
 			o.println("\tMOV\t-(R6), R1\t; ExpressionSub:");
-			o.println("\tSUB\tR0, R1\t; ExpressionSub:"); //前回計算した数、または左部分の数はR1に入っているため、R1からR0を引き算した数をR1に格納する。
+			o.println("\tSUB\tR0, R1\t; ExpressionSub:"); // 前回計算した数、または左部分の数はR1に入っているため、R1からR0を引き算した数をR1に格納する。
 			o.println("\tMOV\tR0, (R6)+\t; ExpressionSub:");
 		}
 	}
