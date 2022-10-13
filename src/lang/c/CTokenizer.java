@@ -80,7 +80,7 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 
 		StringBuffer text = new StringBuffer();
 
-		Character[] useOpe = { '+', '-', '/', '*', '&' }; // 使用する四則演算子
+		Character[] useOpe = { '+', '-' }; // 使用する演算子
 
 		int state = 0;
 		boolean accept = false;
@@ -209,7 +209,6 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 								backChar(ch);
 							}
 							if (ch == (char) -1) {
-								System.out.println("hoge");
 								commentFlag = true;
 								state = 1;
 							}

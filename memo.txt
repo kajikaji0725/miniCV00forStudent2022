@@ -1,0 +1,7 @@
+pointer + number O
+number + pointer O
+pointer + pointer X
+
+pointer - number O
+number - pointer X
+pointer - pointer O

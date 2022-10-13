@@ -20,11 +20,10 @@ public class Factor extends CParseRule {
 		// ここにやってくるときは、必ずisFirst()が満たされている
 		if (FactorAmp.isFirst(pcx.getTokenizer().getCurrentToken(pcx))) {
 			number = new FactorAmp(pcx);
-			number.parse(pcx);
 		} else {
 			number = new Number(pcx);
-			number.parse(pcx);
 		}
+		number.parse(pcx);
 	}
 
 	public void semanticCheck(CParseContext pcx) throws FatalErrorException {
@@ -46,7 +45,7 @@ public class Factor extends CParseRule {
 }
 
 class FactorAmp extends CParseRule {
-	// number ::= NUM
+	// number ::= AMP NUM
 	private CToken num;
 
 	public FactorAmp(CParseContext pcx) {
@@ -64,7 +63,7 @@ class FactorAmp extends CParseRule {
 	}
 
 	public void semanticCheck(CParseContext pcx) throws FatalErrorException {
-		this.setCType(CType.getCType(CType.T_int));
+		this.setCType(CType.getCType(CType.T_pint));
 		this.setConstant(true);
 	}
 
