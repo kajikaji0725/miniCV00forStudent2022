@@ -296,11 +296,11 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 					}
 					break;
 				case 11: // (
-					tk = new CToken(CToken.TK_L, lineNo, startCol, "(");
+					tk = new CToken(CToken.TK_LPAR, lineNo, startCol, "(");
 					accept = true;
 					break;
 				case 12: // )
-					tk = new CToken(CToken.TK_R, lineNo, startCol, ")");
+					tk = new CToken(CToken.TK_RPAR, lineNo, startCol, ")");
 					accept = true;
 					break;
 			}

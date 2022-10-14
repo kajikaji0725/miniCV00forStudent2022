@@ -10,7 +10,7 @@ public class CType {
 			new CType(T_err, "error"),
 			new CType(T_int, "int"),
 			new CType(T_pint, "int*"),
-			new CType(T_Long, "long"),
+			new CType(T_Long, "long (int*)"),
 	};
 
 	private int type;

@@ -1,9 +1,10 @@
-package lang.c.parse;
+package lang.c.parse.term;
 
 import java.io.PrintStream;
 
 import lang.*;
 import lang.c.*;
+import lang.c.parse.factor.Factor;
 
 public class Term extends CParseRule {
 	// term ::= factor { termMult | termDiv }
@@ -36,7 +37,7 @@ public class Term extends CParseRule {
 			factor = list;
 			tk = ct.getCurrentToken(pcx);
 		}
-
+		term = factor;
 	}
 
 	public void semanticCheck(CParseContext pcx) throws FatalErrorException {
