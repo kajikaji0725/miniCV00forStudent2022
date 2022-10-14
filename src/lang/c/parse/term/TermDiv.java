@@ -51,7 +51,7 @@ public class TermDiv extends CParseRule {
 			int nt = s[lt][rt]; // 規則による型計算
 			if (nt == CType.T_err) {
 				pcx.fatalError(op.toExplainString() + "左辺の型[" + left.getCType().toString() + "]と右辺の型["
-						+ right.getCType().toString() + "]は足せません");
+						+ right.getCType().toString() + "]は除算できません");
 			}
 			this.setCType(CType.getCType(nt));
 			this.setConstant(left.isConstant() && right.isConstant()); // +の左右両方が定数のときだけ定数

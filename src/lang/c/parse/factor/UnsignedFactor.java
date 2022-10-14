@@ -27,7 +27,14 @@ public class UnsignedFactor extends CParseRule {
 			ck.getNextToken(pcx);
 			lrFactor = new Expression(pcx);
 			lrFactor.parse(pcx);
-			ck.getNextToken(pcx);
+			tk = ck.getCurrentToken(pcx);
+			if (tk.getType() != CToken.TK_RPAR) {
+				pcx.fatalError(tk.toExplainString() + ")で終わっていない");
+			} else {
+				ck.getNextToken(pcx);
+			}
+			// System.out.println(ck.getCurrentToken(pcx).getText());
+
 		} else {
 			if (FactorAmp.isFirst(tk)) {
 				lrFactor = new FactorAmp(pcx);

@@ -7,7 +7,7 @@ import lang.c.*;
 
 class MinusFactor extends CParseRule {
     // minusFactor ::= MINUS unsignedFactor
-    private CParseRule miFactor;
+    private CParseRule miFactor = null, list = null;
 
     public MinusFactor(CParseContext pcx) {
     }
@@ -17,7 +17,7 @@ class MinusFactor extends CParseRule {
     }
 
     public void parse(CParseContext pcx) throws FatalErrorException {
-        CParseRule list = null;
+
         CTokenizer ct = pcx.getTokenizer();
         CToken tk = ct.getCurrentToken(pcx);
         // num = tk;
@@ -36,7 +36,8 @@ class MinusFactor extends CParseRule {
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
-        if (miFactor != null) {
+        if (miFactor != null && list != null) {
+            list.semanticCheck(pcx);
             this.setCType(CType.getCType(CType.T_int));
             this.setConstant(true);
         }
@@ -45,7 +46,8 @@ class MinusFactor extends CParseRule {
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
         o.println(";;; number starts");
-        if (miFactor != null) {
+        if (miFactor != null && list != null) {
+            list.codeGen(pcx);
             // XORとADDを使わなくても、0-R0をすれば、符号を得られるため、処理を簡略化できる。
             o.println("\tMOV\t-(R6), R0\t; スタックに積んだ'-'符号の数値をR0に移す");
             o.println("\tMOV\t#0, R1\t\t; 引き算をするために、R1に0を入れる");

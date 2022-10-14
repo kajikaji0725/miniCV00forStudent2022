@@ -128,6 +128,16 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 						startCol = colNo - 1;
 						text.append(ch);
 						state = 13;
+					} else if (ch == '(') {
+						startCol = colNo - 1;
+						text.append(ch);
+						lrCount++;
+						state = 11;
+					} else if (ch == ')') {
+						startCol = colNo - 1;
+						text.append(ch);
+						lrCount--;
+						state = 12;
 					} else { // ヘンな文字を読んだ
 						startCol = colNo - 1;
 						text.append(ch);
@@ -138,10 +148,9 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 					if (lrCount != 0) {
 						System.err.println("'(' と　')'の数が合いません");
 						state = 2;
-					} {
+					}
 					tk = new CToken(CToken.TK_EOF, lineNo, startCol, "end_of_file");
 					accept = true;
-				}
 					break;
 				case 2: // ヘンな文字を読んだ
 					tk = new CToken(CToken.TK_ILL, lineNo, startCol, text.toString());
@@ -269,6 +278,8 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 					break;
 				case 12: // )
 					tk = new CToken(CToken.TK_RPAR, lineNo, startCol, ")");
+					accept = true;
+					break;
 				case 13:
 					tk = new CToken(CToken.TK_AMP, lineNo, startCol, "&");
 					accept = true;

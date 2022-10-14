@@ -51,7 +51,7 @@ public class TermMult extends CParseRule {
 			int nt = s[lt][rt]; // 規則による型計算
 			if (nt == CType.T_err) {
 				pcx.fatalError(op.toExplainString() + "左辺の型[" + left.getCType().toString() + "]と右辺の型["
-						+ right.getCType().toString() + "]は足せません");
+						+ right.getCType().toString() + "]は乗算できません");
 			}
 			this.setCType(CType.getCType(nt));
 			this.setConstant(left.isConstant() && right.isConstant()); // +の左右両方が定数のときだけ定数
@@ -64,9 +64,9 @@ public class TermMult extends CParseRule {
 		if (left != null && right != null) {
 			left.codeGen(pcx);
 			right.codeGen(pcx);
-			o.println("\tJSR\tMULT\t\t ; サブルーチンDIVを呼ぶ");
+			o.println("\tJSR\tMULT\t\t ; サブルーチンMULTを呼ぶ");
 			o.println("\tSUB\t#2, R6\t\t ; スタックに積んである引数をおろす");
-			o.println("\tMOV\tR0, (R6)+\t ; R0に格納されているDIVの結果をスタックに積む");
+			o.println("\tMOV\tR0, (R6)+\t ; R0に格納されているMULTの結果をスタックに積む");
 		}
 		o.println(";;; term completes");
 	}

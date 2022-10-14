@@ -7,7 +7,7 @@ import lang.c.*;
 
 class PlusFactor extends CParseRule {
     // number ::= PLUS unsignedFactor
-    private CToken num;
+    private CParseRule plusFactor = null, list = null;
 
     public PlusFactor(CParseContext pcx) {
     }
@@ -19,21 +19,31 @@ class PlusFactor extends CParseRule {
     public void parse(CParseContext pcx) throws FatalErrorException {
         CTokenizer ct = pcx.getTokenizer();
         CToken tk = ct.getCurrentToken(pcx);
-        num = tk;
+        // num = tk;
         tk = ct.getNextToken(pcx);
+
+        if (UnsignedFactor.isFirst(tk)) {
+            list = new UnsignedFactor(pcx);
+        } else {
+            // pcx.fatalError("MINUSのあとはnumber、Amp、LPARです");
+        }
+        list.parse(pcx);
+        plusFactor = list;
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
-        this.setCType(CType.getCType(CType.T_int));
-        this.setConstant(true);
+        if (list != null) {
+            list.semanticCheck(pcx);
+            this.setCType(CType.getCType(CType.T_int));
+            this.setConstant(true);
+        }
     }
 
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
         o.println(";;; number starts");
-        if (num != null) {
-            o.println("\tMOV\t#" + num.getText() + ", (R6)+\t; Number: 数を積む<" +
-                    num.toExplainString() + ">");
+        if (plusFactor != null && list != null) {
+            list.codeGen(pcx);
         }
         o.println(";;; number completes");
     }

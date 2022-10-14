@@ -29,6 +29,10 @@ public class Expression extends CParseRule {
 				list = new ExpressionAdd(pcx, term);
 			} else if (ExpressionSub.isFirst(tk)) {
 				list = new ExpressionSub(pcx, term);
+			} else if (tk.getText().isEmpty()) {
+				tk = ct.getNextToken(pcx);
+				System.out.println(tk.getText());
+				continue;
 			} else {
 				break;
 			}
