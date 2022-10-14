@@ -4,10 +4,12 @@ import java.io.PrintStream;
 
 import lang.*;
 import lang.c.*;
+import lang.c.parse.Number;
 
 class FactorAmp extends CParseRule {
     // number ::= AMP NUM
     private CToken num;
+    private CParseRule factAmp;
 
     public FactorAmp(CParseContext pcx) {
     }
@@ -21,6 +23,16 @@ class FactorAmp extends CParseRule {
         CToken tk = ct.getCurrentToken(pcx);
         num = tk;
         tk = ct.getNextToken(pcx);
+
+        if (Number.isFirst(tk)) {
+            CParseRule list = null;
+            list = new Number(pcx);
+            list.parse(pcx);
+
+            factAmp = list;
+        } else {
+            pcx.fatalError("&のエラーです");
+        }
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
@@ -31,9 +43,8 @@ class FactorAmp extends CParseRule {
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
         o.println(";;; number starts");
-        if (num != null) {
-            o.println("\tMOV\t#" + num.getText() + ", (R6)+\t; Number: 数を積む<" +
-                    num.toExplainString() + ">");
+        if (factAmp != null) {
+            factAmp.codeGen(pcx);
         }
         o.println(";;; number completes");
     }

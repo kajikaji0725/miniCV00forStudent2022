@@ -39,8 +39,7 @@ class ExpressionSub extends CParseRule {
                 // T_err T_int
                 { CType.T_err, CType.T_err, CType.T_err }, // T_err
                 { CType.T_err, CType.T_int, CType.T_err }, // T_int
-                { CType.T_err, CType.T_pint, CType.T_Long }, // c++では、pointer-pointerはlongになっていた
-                // c++のtypeidを用いたところ、pointer-pointerの結果のtypeidが"l(エル)"と出力された
+                { CType.T_err, CType.T_pint, CType.T_int }, // 
         };
         if (left != null && right != null) {
             left.semanticCheck(pcx);
@@ -64,8 +63,8 @@ class ExpressionSub extends CParseRule {
             right.codeGen(pcx); // 右部分木のコード生成を頼む
             o.println("\tMOV\t-(R6), R0\t; ExpressionSub: ２数を取り出して、減算し、積む<" + op.toString() + ">");
             o.println("\tMOV\t-(R6), R1\t; ExpressionSub:");
-            o.println("\tSUB\tR0, R1\t\t; ExpressionSub:"); // 前回計算した数、または左部分の数はR1に入っているため、R1からR0を引き算した数をR1に格納する。
-            o.println("\tMOV\tR0, (R6)+\t; ExpressionSub:");
+            o.println("\tSUB\tR0, R1\t; ExpressionSub:"); // 前回計算した数、または左部分の数はR1に入っているため、R1からR0を引き算した数をR1に格納する。
+            o.println("\tMOV\tR1, (R6)+\t; ExpressionSub:");
         }
     }
 }
