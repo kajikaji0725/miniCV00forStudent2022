@@ -4,13 +4,11 @@ public class CType {
 	public static final int T_err = 0; // 型エラー
 	public static final int T_int = 1; // int
 	public static final int T_pint = 2; // int*
-	public static final int T_Long = 3; // pointer-pointerがc++ではlongになっていたため追加
 
 	private static CType[] typeArray = {
 			new CType(T_err, "error"),
 			new CType(T_int, "int"),
 			new CType(T_pint, "int*"),
-			new CType(T_Long, "long"),
 	};
 
 	private int type;
