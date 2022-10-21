@@ -31,7 +31,7 @@ public class Expression extends CParseRule {
 				list = new ExpressionSub(pcx, term);
 			} else if (tk.getText().isEmpty()) {
 				tk = ct.getNextToken(pcx);
-				System.out.println(tk.getText());
+				// System.out.println(tk.getText());
 				continue;
 			} else {
 				break;

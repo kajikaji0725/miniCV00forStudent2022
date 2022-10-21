@@ -36,18 +36,19 @@ public class TermDiv extends CParseRule {
 
 	public void semanticCheck(CParseContext pcx) throws FatalErrorException {
 		final int s[][] = {
-				// T_err T_int
-				{ CType.T_err, CType.T_err, CType.T_err, CType.T_err }, // T_err
-				{ CType.T_err, CType.T_int, CType.T_err, CType.T_err }, // T_int (T_pintはerror)
-				{ CType.T_err, CType.T_err, CType.T_err, CType.T_err }, // T_pint Divではerror
-				{ CType.T_err, CType.T_err, CType.T_err, CType.T_err }, // T_pint Divではerror
+				// T_err T_int T_pint T_aint T_apint
+				{ CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err }, // T_err
+				{ CType.T_err, CType.T_int, CType.T_err, CType.T_err, CType.T_err, CType.T_err }, // T_int(T_pintはerror)
+				{ CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err }, // T_pint Divではerror
+				{ CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err }, // T_aint Divではerror
+				{ CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err }, // T_apint Divではerror
 		};
 		if (left != null && right != null) {
 			left.semanticCheck(pcx);
 			right.semanticCheck(pcx);
 			int lt = left.getCType().getType(); // +の左辺の型
 			int rt = right.getCType().getType(); // +の右辺の型
-			//System.out.println(right.getCType().getType());
+			// System.out.println(right.getCType().getType());
 			int nt = s[lt][rt]; // 規則による型計算
 			if (nt == CType.T_err) {
 				pcx.fatalError(op.toExplainString() + "左辺の型[" + left.getCType().toString() + "]と右辺の型["

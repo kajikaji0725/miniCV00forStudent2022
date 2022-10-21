@@ -5,10 +5,10 @@ import java.io.PrintStream;
 import lang.*;
 import lang.c.*;
 import lang.c.parse.Number;
+import lang.c.parse.primary.Primary;
 
 class FactorAmp extends CParseRule {
-    // number ::= AMP NUM
-    private CToken num;
+    // number ::= AMP (NUM | primary)
     private CParseRule factAmp;
 
     public FactorAmp(CParseContext pcx) {
@@ -21,14 +21,16 @@ class FactorAmp extends CParseRule {
     public void parse(CParseContext pcx) throws FatalErrorException {
         CTokenizer ct = pcx.getTokenizer();
         CToken tk = ct.getCurrentToken(pcx);
-        num = tk;
         tk = ct.getNextToken(pcx);
+        CParseRule list = null;
 
         if (Number.isFirst(tk)) {
-            CParseRule list = null;
             list = new Number(pcx);
             list.parse(pcx);
-
+            factAmp = list;
+        } else if (Primary.isFirst(tk)) {
+            list = new Primary(pcx);
+            list.parse(pcx);
             factAmp = list;
         } else {
             pcx.fatalError("&のエラーです");

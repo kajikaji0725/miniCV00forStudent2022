@@ -37,9 +37,11 @@ class ExpressionSub extends CParseRule {
         // 引き算の型計算規則
         final int s[][] = {
                 // T_err T_int
-                { CType.T_err, CType.T_err, CType.T_err }, // T_err
-                { CType.T_err, CType.T_int, CType.T_err }, // T_int
-                { CType.T_err, CType.T_pint, CType.T_int }, // 
+                { CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err }, // T_err
+                { CType.T_err, CType.T_int, CType.T_err, CType.T_pint, CType.T_err }, // T_int
+                { CType.T_err, CType.T_pint, CType.T_int, CType.T_err, CType.T_err }, // T_pint
+                { CType.T_err, CType.T_pint, CType.T_err, CType.T_int, CType.T_err }, // T_aint
+                { CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_int }, // T_apint
         };
         if (left != null && right != null) {
             left.semanticCheck(pcx);
