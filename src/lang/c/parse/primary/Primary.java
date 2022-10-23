@@ -32,8 +32,8 @@ public class Primary extends CParseRule {
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
         if (primary != null) {
             primary.semanticCheck(pcx);
-            setCType(primary.getCType()); // number の型をそのままコピー
-            setConstant(primary.isConstant()); // number は常に定数
+            setCType(primary.getCType());
+            setConstant(primary.isConstant());
         }
     }
 

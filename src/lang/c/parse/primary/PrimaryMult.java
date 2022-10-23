@@ -26,7 +26,7 @@ public class PrimaryMult extends CParseRule {
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
-        this.setCType(CType.getCType(CType.T_int));
+        this.setCType(CType.getCType(CType.T_apint));
         this.setConstant(true);
     }
 

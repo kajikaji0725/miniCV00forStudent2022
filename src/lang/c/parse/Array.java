@@ -41,7 +41,7 @@ public class Array extends CParseRule {
         if (!type.isCType(CType.T_int)) {
             pcx.fatalError("配列の要素はint型だけです");
         }
-        this.setCType(CType.getCType(CType.T_int));
+        this.setCType(CType.getCType(CType.T_aint));
         this.setConstant(true);
     }
 

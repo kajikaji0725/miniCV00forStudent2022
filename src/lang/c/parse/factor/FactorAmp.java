@@ -6,9 +6,10 @@ import lang.*;
 import lang.c.*;
 import lang.c.parse.Number;
 import lang.c.parse.primary.Primary;
+import lang.c.parse.primary.PrimaryMult;
 
 class FactorAmp extends CParseRule {
-    // number ::= AMP (NUM | primary)
+    // factorAmp ::= AMP (NUM | primary)
     private CParseRule factAmp;
 
     public FactorAmp(CParseContext pcx) {
@@ -29,6 +30,9 @@ class FactorAmp extends CParseRule {
             list.parse(pcx);
             factAmp = list;
         } else if (Primary.isFirst(tk)) {
+            if (PrimaryMult.isFirst(tk)) {
+                pcx.fatalError("&*~の記法はできません");
+            }
             list = new Primary(pcx);
             list.parse(pcx);
             factAmp = list;

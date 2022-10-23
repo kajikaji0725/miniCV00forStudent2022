@@ -23,9 +23,7 @@ public class Variable extends CParseRule {
         ident.parse(pcx);
         // ct.getNextToken(pcx);
         tk = ct.getCurrentToken(pcx);
-        if (!Array.isFirst(tk)) {
-            pcx.fatalError(tk.toExplainString() + "配列は[1]のように宣言してください");
-        } else {
+        if (Array.isFirst(tk)) {
             ct.getNextToken(pcx);
             array = new Array(pcx);
             // System.out.println(ct.getCurrentToken(pcx).getText());
@@ -36,9 +34,9 @@ public class Variable extends CParseRule {
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
         if (ident != null && array != null) {
             ident.semanticCheck(pcx);
-            
-            this.setCType(CType.getCType(CType.T_int));
-            this.setConstant(true);
+
+            this.setCType(ident.getCType());
+            this.setConstant(ident.isConstant());
         }
     }
 
@@ -49,9 +47,17 @@ public class Variable extends CParseRule {
             // o.println("\tMOV\t#" + num.getText() + ", (R6)+\t\t; Number: 数を積む<" +
             // num.toExplainString() + ">");
             // o.println("variable hoge");
-            array.semanticCheck(pcx);
-            ident.codeGen(pcx);
-            array.codeGen(pcx);
+            ident.semanticCheck(pcx);
+            if (array != null) {
+                if (ident.isConstant()) {
+                    pcx.fatalError("配列の定数は宣言できません");
+                }
+                array.semanticCheck(pcx);
+                ident.codeGen(pcx);
+                array.codeGen(pcx);
+            } else {
+                ident.codeGen(pcx);
+            }
         }
         o.println(";;; number completes");
     }
