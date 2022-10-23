@@ -41,10 +41,8 @@ class PlusFactor extends CParseRule {
 
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
-        o.println(";;; number starts");
         if (plusFactor != null && list != null) {
             list.codeGen(pcx);
         }
-        o.println(";;; number completes");
     }
 }

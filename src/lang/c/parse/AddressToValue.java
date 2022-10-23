@@ -35,10 +35,10 @@ public class AddressToValue extends CParseRule {
 
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
-        o.println(";;; factor starts");
+        o.println(";;; AddressToValue starts");
         if (address != null) {
             address.codeGen(pcx);
         }
-        o.println(";;; factor completes");
+        o.println(";;; AddressToValue completes");
     }
 }

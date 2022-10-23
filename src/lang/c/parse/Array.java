@@ -9,7 +9,7 @@ import lang.c.parse.exper.Expression;
 public class Array extends CParseRule {
     // array ::= LBRA expression RBRA
     private CToken array;
-    private CParseRule lrFactor;
+    private CParseRule exp;
 
     public Array(CParseContext pcx) {
     }
@@ -23,8 +23,8 @@ public class Array extends CParseRule {
         CToken tk = ct.getCurrentToken(pcx);
 
         tk = ct.getCurrentToken(pcx);
-        lrFactor = new Expression(pcx);
-        lrFactor.parse(pcx);
+        exp = new Expression(pcx);
+        exp.parse(pcx);
         tk = ct.getCurrentToken(pcx);
 
         if (tk.getType() != CToken.TK_RBRA) {
@@ -36,23 +36,24 @@ public class Array extends CParseRule {
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
-        lrFactor.semanticCheck(pcx);
-        CType type = lrFactor.getCType();
-        if (!type.isCType(CType.T_int)) {
+        exp.semanticCheck(pcx);
+        CType type = exp.getCType();
+        if (!(type.isCType(CType.T_int) || type.isCType(CType.T_aint))) {
             pcx.fatalError("配列の要素はint型だけです");
         }
         this.setCType(CType.getCType(CType.T_aint));
-        this.setConstant(true);
+        this.setConstant(false);
     }
 
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
-        o.println(";;; number starts");
-        if (array != null) {
+        o.println(";;; Array starts");
+        if (exp != null) {
             // o.println("\tMOV\t#" + num.getText() + ", (R6)+\t\t; Number: 数を積む<" +
             // num.toExplainString() + ">");
+            exp.codeGen(pcx);
             o.println("Array hoge");
         }
-        o.println(";;; number completes");
+        o.println(";;; Array completes");
     }
 }

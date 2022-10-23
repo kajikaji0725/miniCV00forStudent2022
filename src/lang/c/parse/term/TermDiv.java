@@ -61,7 +61,6 @@ public class TermDiv extends CParseRule {
 
 	public void codeGen(CParseContext pcx) throws FatalErrorException {
 		PrintStream o = pcx.getIOContext().getOutStream();
-		o.println(";;; term starts");
 		if (left != null && right != null) {
 			left.codeGen(pcx);
 			right.codeGen(pcx);
@@ -69,6 +68,5 @@ public class TermDiv extends CParseRule {
 			o.println("\tSUB\t#2, R6\t\t ; スタックに積んである引数をおろす");
 			o.println("\tMOV\tR0, (R6)+\t ; R0に格納されているDIVの結果をスタックに積む");
 		}
-		o.println(";;; term completes");
 	}
 }

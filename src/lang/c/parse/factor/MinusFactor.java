@@ -38,6 +38,11 @@ class MinusFactor extends CParseRule {
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
         if (miFactor != null && list != null) {
             list.semanticCheck(pcx);
+
+            if (list.getCType() == CType.getCType(CType.T_pint) || list.getCType() == CType.getCType(CType.T_apint)) {
+                pcx.fatalError("ポインタに符号はつけれません");
+            }
+
             this.setCType(CType.getCType(CType.T_int));
             this.setConstant(true);
         }

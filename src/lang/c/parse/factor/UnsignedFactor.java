@@ -61,10 +61,10 @@ public class UnsignedFactor extends CParseRule {
 
 	public void codeGen(CParseContext pcx) throws FatalErrorException {
 		PrintStream o = pcx.getIOContext().getOutStream();
-		o.println(";;; factor starts");
+		o.println(";;; UnsignedFactor starts");
 		if (unFactor != null) {
 			unFactor.codeGen(pcx);
 		}
-		o.println(";;; factor completes");
+		o.println(";;; UnsignedFactor completes");
 	}
 }

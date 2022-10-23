@@ -43,20 +43,24 @@ public class Ident extends CParseRule {
             pcx.fatalError("変数は、i_ ip_ ia_ ipa_ c_ のどちらかで宣言してください");
         }
 
-        System.out.println(type + " " + constantFlag);
-
         this.setCType(CType.getCType(type));
         this.setConstant(constantFlag);
     }
 
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
-        o.println(";;; number starts");
+        o.println(";;; Ident starts");
         if (ident != null) {
             // o.println("\tMOV\t#" + num.getText() + ", (R6)+\t\t; Number: 数を積む<" +
             // num.toExplainString() + ">");
-            o.println("ident hoge");
+            // o.println("ident hoge");
+
+            if (ident != null) {
+                o.println("\tMOV\t#" + ident.getText() + ", (R6)+\t; Ident: 変数アドレスを積む<"
+                        + ident.toExplainString() + ">");
+            }
+
         }
-        o.println(";;; number completes");
+        o.println(";;; Ident completes");
     }
 }

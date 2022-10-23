@@ -19,21 +19,43 @@ public class Variable extends CParseRule {
     public void parse(CParseContext pcx) throws FatalErrorException {
         CTokenizer ct = pcx.getTokenizer();
         CToken tk = ct.getCurrentToken(pcx);
+        CParseRule list = null, ar = null;
         ident = new Ident(pcx);
         ident.parse(pcx);
         // ct.getNextToken(pcx);
         tk = ct.getCurrentToken(pcx);
-        if (Array.isFirst(tk)) {
-            ct.getNextToken(pcx);
-            array = new Array(pcx);
-            // System.out.println(ct.getCurrentToken(pcx).getText());
-            array.parse(pcx);
+        while (true) {
+            if (Array.isFirst(tk)) {
+                ct.getNextToken(pcx);
+                list = new Array(pcx);
+                // System.out.println(ct.getCurrentToken(pcx).getText());
+            } else {
+                break;
+            }
+            list.parse(pcx);
+            tk = ct.getCurrentToken(pcx);
+            ar = list;
         }
+        array = ar;
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
-        if (ident != null && array != null) {
+        if (ident != null) {
             ident.semanticCheck(pcx);
+            CType type = ident.getCType();
+            if (array != null) {
+                array.semanticCheck(pcx);
+                if (ident.isConstant()) {
+                    pcx.fatalError("配列の定数は宣言できません");
+                }
+                if (type.isCType(CType.T_int) || type.isCType(CType.T_pint)) {
+                    pcx.fatalError("配列を宣言する際は、ia_かipa_です");
+                }
+            } else {
+                if (type.isCType(CType.T_aint) || type.isCType(CType.T_apint)) {
+                    pcx.fatalError("配列の宣言には[]が必要です");
+                }
+            }
 
             this.setCType(ident.getCType());
             this.setConstant(ident.isConstant());
@@ -42,23 +64,17 @@ public class Variable extends CParseRule {
 
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
-        o.println(";;; number starts");
+        o.println(";;; Variable starts");
         if (ident != null) {
-            // o.println("\tMOV\t#" + num.getText() + ", (R6)+\t\t; Number: 数を積む<" +
-            // num.toExplainString() + ">");
-            // o.println("variable hoge");
-            ident.semanticCheck(pcx);
+            ident.codeGen(pcx);
             if (array != null) {
-                if (ident.isConstant()) {
-                    pcx.fatalError("配列の定数は宣言できません");
-                }
-                array.semanticCheck(pcx);
-                ident.codeGen(pcx);
                 array.codeGen(pcx);
-            } else {
-                ident.codeGen(pcx);
+                o.println("\tMOV\t-(R6), R1\t; Arrayのexpの値をR1に格納する");
+                o.println("\tMOV\t-(R6), R0\t; IdentのアドレスをR0に格納する");
+                o.println("\tADD\tR1, R0   \t; 参照するアドレス値を計算");
+                o.println("\tMOV\tR0, (R6)+\t; 計算結果をスタックに積む");
             }
         }
-        o.println(";;; number completes");
+        o.println(";;; Variable completes");
     }
 }

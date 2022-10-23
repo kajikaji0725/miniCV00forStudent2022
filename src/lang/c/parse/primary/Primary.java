@@ -39,10 +39,10 @@ public class Primary extends CParseRule {
 
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
-        o.println(";;; factor starts");
+        o.println(";;; Primary starts");
         if (primary != null) {
             primary.codeGen(pcx);
         }
-        o.println(";;; factor completes");
+        o.println(";;; Primary completes");
     }
 }

@@ -42,16 +42,22 @@ class FactorAmp extends CParseRule {
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
+        factAmp.semanticCheck(pcx);
+
+        if (factAmp.getCType() == CType.getCType(CType.T_pint) || factAmp.getCType() == CType.getCType(CType.T_apint)) {
+            pcx.fatalError("今回はポインタのポインタは使えません");
+        }
+
         this.setCType(CType.getCType(CType.T_pint));
         this.setConstant(true);
     }
 
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
-        o.println(";;; number starts");
+        o.println(";;; factorAmp starts");
         if (factAmp != null) {
             factAmp.codeGen(pcx);
         }
-        o.println(";;; number completes");
+        o.println(";;; factorAmp completes");
     }
 }
