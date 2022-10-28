@@ -18,4 +18,6 @@ public class CState {
     public static final int S_LBRA = 15; // [
     public static final int S_RBRA = 16; // ]
     public static final int S_IDENT = 17; // indent
+    public static final int S_ASSIGN = 18; // =
+    public static final int S_SEMI = 19; // ;
 }

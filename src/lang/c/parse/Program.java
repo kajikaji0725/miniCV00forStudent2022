@@ -1,32 +1,53 @@
 package lang.c.parse;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
+
 import lang.*;
 import lang.c.*;
 import lang.c.parse.exper.Expression;
+import lang.c.parse.state.Statement;
 
 public class Program extends CParseRule {
 	// program ::= expression EOF
 	private CParseRule program;
+	private ArrayList<String> state = new ArrayList<String>();
 
 	public Program(CParseContext pcx) {
 	}
+
 	public static boolean isFirst(CToken tk) {
-		return Expression.isFirst(tk);
+		return Statement.isFirst(tk);
 	}
+
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
-		program = new Expression(pcx);
-		program.parse(pcx);
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
+		while (true) {
+			if (Statement.isFirst(tk)) {
+				program = new Statement(pcx);
+			} else {
+				break;
+			}
+			program.parse(pcx);
+			System.out.println(tk.getText());
+			tk = ct.getCurrentToken(pcx);
+			state.add(tk.getText());
+
+			// ct.getNextToken(pcx);
+		}
+		// state.add(tk.getText());
 		if (tk.getType() != CToken.TK_EOF) {
 			pcx.fatalError(tk.toExplainString() + "プログラムの最後にゴミがあります");
 		}
 	}
 
 	public void semanticCheck(CParseContext pcx) throws FatalErrorException {
-		if (program != null) { program.semanticCheck(pcx); }
+		// System.out.println(state);
+		if (program != null) {
+			program.semanticCheck(pcx);
+		}
 	}
 
 	public void codeGen(CParseContext pcx) throws FatalErrorException {

@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
-
 import lang.*;
 import lang.c.CState;
 
@@ -159,6 +157,14 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 						startCol = colNo - 1;
 						text.append(ch);
 						state = CState.S_IDENT;
+					} else if (ch == '=') {
+						startCol = colNo - 1;
+						text.append(ch);
+						state = CState.S_ASSIGN;
+					} else if (ch == ';') {
+						startCol = colNo - 1;
+						text.append(ch);
+						state = CState.S_SEMI;
 					} else { // ヘンな文字を読んだ
 						startCol = colNo - 1;
 						text.append(ch);
@@ -305,19 +311,19 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 					tk = new CToken(CToken.TK_RPAR, lineNo, startCol, ")");
 					accept = true;
 					break;
-				case CState.S_AMP:
+				case CState.S_AMP: // &
 					tk = new CToken(CToken.TK_AMP, lineNo, startCol, "&");
 					accept = true;
 					break;
-				case CState.S_LBRA:
+				case CState.S_LBRA: // [
 					tk = new CToken(CToken.TK_LBRA, lineNo, startCol, "[");
 					accept = true;
 					break;
-				case CState.S_RBRA:
+				case CState.S_RBRA: // ]
 					tk = new CToken(CToken.TK_RBRA, lineNo, startCol, "]");
 					accept = true;
 					break;
-				case CState.S_IDENT:
+				case CState.S_IDENT: // ident
 					ch = readChar();
 					if (isIndent(ch) || Character.isDigit(ch) || ch == '_') {
 						text.append(ch);
@@ -326,6 +332,14 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 						tk = new CToken(CToken.TK_IDENT, lineNo, startCol, text.toString());
 						accept = true;
 					}
+					break;
+				case CState.S_ASSIGN: // =
+					tk = new CToken(CToken.TK_ASSIGN, lineNo, startCol, "=");
+					accept = true;
+					break;
+				case CState.S_SEMI: // ;
+					tk = new CToken(CToken.TK_SEMI, lineNo, startCol, ";");
+					accept = true;
 					break;
 			}
 		}

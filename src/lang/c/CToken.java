@@ -12,6 +12,8 @@ public class CToken extends SimpleToken {
 	public static final int TK_LBRA = 8; // [
 	public static final int TK_RBRA = 9; // ]
 	public static final int TK_IDENT = 10; // indent
+	public static final int TK_ASSIGN = 11; // =
+	public static final int TK_SEMI = 12; // ;
 
 	public CToken(int type, int lineNo, int colNo, String s) {
 		super(type, lineNo, colNo, s);

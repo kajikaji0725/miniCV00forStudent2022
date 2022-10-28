@@ -22,6 +22,8 @@
 ./lang/c/parse/primary/Primary.java
 ./lang/c/parse/primary/PrimaryMult.java
 ./lang/c/parse/Program.java
+./lang/c/parse/state/Statement.java
+./lang/c/parse/state/StatementAssign.java
 ./lang/c/parse/term/Term.java
 ./lang/c/parse/term/TermDiv.java
 ./lang/c/parse/term/TermMult.java

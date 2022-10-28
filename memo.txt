@@ -5,3 +5,11 @@ pointer + pointer X
 pointer - number O
 number - pointer X
 pointer - pointer O
+
+apint + aint X
+aint + apint X
+apint + apint X
+
+apint - aint X
+aint - apint x
+apint - apint  O
