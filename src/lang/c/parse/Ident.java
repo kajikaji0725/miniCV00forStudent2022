@@ -51,15 +51,8 @@ public class Ident extends CParseRule {
         PrintStream o = pcx.getIOContext().getOutStream();
         o.println(";;; Ident starts");
         if (ident != null) {
-            // o.println("\tMOV\t#" + num.getText() + ", (R6)+\t\t; Number: 数を積む<" +
-            // num.toExplainString() + ">");
-            // o.println("ident hoge");
-
-            if (ident != null) {
-                o.println("\tMOV\t#" + ident.getText() + ", (R6)+\t; Ident: 変数アドレスを積む<"
-                        + ident.toExplainString() + ">");
-            }
-
+            o.println("\tMOV\t#" + ident.getText() + ", (R6)+\t; Ident: 変数アドレスを積む<"
+                    + ident.toExplainString() + ">");
         }
         o.println(";;; Ident completes");
     }
