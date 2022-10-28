@@ -52,7 +52,6 @@ public class Array extends CParseRule {
             // o.println("\tMOV\t#" + num.getText() + ", (R6)+\t\t; Number: 数を積む<" +
             // num.toExplainString() + ">");
             exp.codeGen(pcx);
-            o.println("Array hoge");
         }
         o.println(";;; Array completes");
     }

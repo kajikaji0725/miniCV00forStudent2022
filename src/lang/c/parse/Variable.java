@@ -69,8 +69,8 @@ public class Variable extends CParseRule {
             ident.codeGen(pcx);
             if (array != null) {
                 array.codeGen(pcx);
-                o.println("\tMOV\t-(R6), R1\t; Arrayのexpの値をR1に格納する");
-                o.println("\tMOV\t-(R6), R0\t; IdentのアドレスをR0に格納する");
+                o.println("\tMOV\t-(R6), R1\t; Arrayのexpressionの値をR1に格納する");
+                o.println("\tMOV\t-(R6), R0\t; 変数アドレスをR0に格納する");
                 o.println("\tADD\tR1, R0   \t; 参照するアドレス値を計算");
                 o.println("\tMOV\tR0, (R6)+\t; 計算結果をスタックに積む");
             }
