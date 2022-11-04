@@ -4,14 +4,13 @@ import java.io.PrintStream;
 
 import lang.*;
 import lang.c.*;
-import lang.c.parse.Variable;
 import lang.c.parse.exper.Expression;
 import lang.c.parse.primary.Primary;
+import lang.c.parse.primary.PrimaryMult;
 
 public class StatementAssign extends CParseRule {
     // statementAssign ::= primary ASSIGN expression SEMI
-    private CParseRule primary;
-    private CParseRule exper;
+    private CParseRule primary,exper;
     private CToken token;
 
     public StatementAssign(CParseContext pcx) {
@@ -64,17 +63,26 @@ public class StatementAssign extends CParseRule {
                     { CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err },
             };
 
-            CType primType = primary.getCType();
-            CType experType = exper.getCType();
+            int primType = primary.getCType().getType();
+            if (primary instanceof PrimaryMult) {
+                System.out.println("hoge");
+                if (primary.getCType().isCType(CType.T_pint)) {
+                    primType = CType.T_int;
+                }
+                if (primary.getCType().isCType(CType.T_apint)) {
+                    primType = CType.T_pint;
+                }
+            }
+            int experType = exper.getCType().getType();
 
-            int nt = s[primType.getType()][experType.getType()];
+            int nt = s[primType][experType];
 
             if (primary.isConstant()) {
                 pcx.fatalError(token.toExplainString() + "定数に代入できません");
             }
             if (nt == CType.T_err) {
-                pcx.fatalError("左辺の型[" + primType.toString() + "]に右辺の型["
-                        + experType.toString() + "]は代入できません");
+                pcx.fatalError("左辺の型[" + primary.getCType().toString() + "]に右辺の型["
+                        + exper.getCType().toString() + "]は代入できません");
             }
 
             setCType(primary.getCType()); // number の型をそのままコピー

@@ -30,11 +30,14 @@ class FactorAmp extends CParseRule {
             list.parse(pcx);
             factAmp = list;
         } else if (Primary.isFirst(tk)) {
-            if (PrimaryMult.isFirst(tk)) {
-                pcx.fatalError("&*~の記法はできません");
-            }
+            // if (PrimaryMult.isFirst(tk)) {
+            // pcx.fatalError("&*~の記法はできません");
+            // }
             list = new Primary(pcx);
             list.parse(pcx);
+            if (list instanceof PrimaryMult) {
+                pcx.fatalError("&*~の記法はできません");
+            }
             factAmp = list;
         } else {
             pcx.fatalError("&のエラーです");
