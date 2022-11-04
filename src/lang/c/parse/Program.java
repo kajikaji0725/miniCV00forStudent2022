@@ -5,15 +5,15 @@ import java.util.ArrayList;
 
 import lang.*;
 import lang.c.*;
-import lang.c.parse.exper.Expression;
 import lang.c.parse.state.Statement;
 
 public class Program extends CParseRule {
-	// program ::= expression EOF
+	// program ::= { statement } EOF
 	private CParseRule program;
-	private ArrayList<String> state = new ArrayList<String>();
+	private ArrayList<CParseRule> state;
 
 	public Program(CParseContext pcx) {
+		state = new ArrayList<CParseRule>();
 	}
 
 	public static boolean isFirst(CToken tk) {
@@ -31,13 +31,9 @@ public class Program extends CParseRule {
 				break;
 			}
 			program.parse(pcx);
-			System.out.println(tk.getText());
+			state.add(program);
 			tk = ct.getCurrentToken(pcx);
-			state.add(tk.getText());
-
-			// ct.getNextToken(pcx);
 		}
-		// state.add(tk.getText());
 		if (tk.getType() != CToken.TK_EOF) {
 			pcx.fatalError(tk.toExplainString() + "プログラムの最後にゴミがあります");
 		}

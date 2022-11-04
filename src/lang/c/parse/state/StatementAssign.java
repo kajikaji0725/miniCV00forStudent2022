@@ -10,7 +10,9 @@ import lang.c.parse.primary.Primary;
 
 public class StatementAssign extends CParseRule {
     // statementAssign ::= primary ASSIGN expression SEMI
-    private CParseRule stateAssign;
+    private CParseRule primary;
+    private CParseRule exper;
+    private CToken token;
 
     public StatementAssign(CParseContext pcx) {
     }
@@ -23,9 +25,9 @@ public class StatementAssign extends CParseRule {
         // ここにやってくるときは、必ずisFirst()が満たされている
         CTokenizer ct = pcx.getTokenizer();
         CToken tk = ct.getCurrentToken(pcx);
-        stateAssign = new Primary(pcx);
-        stateAssign.parse(pcx);
-
+        primary = new Primary(pcx);
+        primary.parse(pcx);
+        token = tk;
         tk = ct.getCurrentToken(pcx);
         if (!tk.getText().equals("=")) {
             pcx.fatalError(tk.toExplainString() + "=が必要です");
@@ -36,32 +38,42 @@ public class StatementAssign extends CParseRule {
         if (!Expression.isFirst(tk)) {
             pcx.fatalError(tk.toExplainString() + "=のあとはexperです");
         }
-        stateAssign = new Expression(pcx);
-        stateAssign.parse(pcx);
+        exper = new Expression(pcx);
+        exper.parse(pcx);
 
         tk = ct.getCurrentToken(pcx);
         if (!tk.getText().equals(";")) {
             pcx.fatalError(tk.toExplainString() + "experのあとは;です");
         }
-        System.out.println(tk.getText());
+
         ct.getNextToken(pcx);
 
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
-        if (stateAssign != null) {
-            stateAssign.semanticCheck(pcx);
-            setCType(stateAssign.getCType()); // number の型をそのままコピー
-            setConstant(stateAssign.isConstant()); // number は常に定数
+        if (primary != null && exper != null) {
+            primary.semanticCheck(pcx);
+            exper.semanticCheck(pcx);
+
+            CType primType = primary.getCType();
+            CType experType = exper.getCType();
+
+            if (primary.isConstant()) {
+                pcx.fatalError(token.toExplainString() + "定数に代入できません");
+            }
+
+            setCType(primary.getCType()); // number の型をそのままコピー
+            setConstant(primary.isConstant()); // number は常に定数
         }
     }
 
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
-        o.println(";;; AddressToValue starts");
-        if (stateAssign != null) {
-            stateAssign.codeGen(pcx);
+        o.println(";;; StatementAssign starts");
+        if (primary != null && exper != null) {
+            primary.codeGen(pcx);
+            exper.codeGen(pcx);
         }
-        o.println(";;; AddressToValue completes");
+        o.println(";;; StatementAssign completes");
     }
 }

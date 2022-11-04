@@ -4,7 +4,6 @@ import java.io.PrintStream;
 
 import lang.*;
 import lang.c.*;
-import lang.c.parse.Variable;
 import lang.c.parse.primary.Primary;
 
 public class AddressToValue extends CParseRule {
