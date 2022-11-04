@@ -1,16 +1,19 @@
 package lang.c.parse.state;
 
 import java.io.PrintStream;
+import java.lang.reflect.Field;
 
 import lang.*;
 import lang.c.*;
+import lang.c.parse.Ident;
+import lang.c.parse.Program;
 import lang.c.parse.exper.Expression;
 import lang.c.parse.primary.Primary;
 import lang.c.parse.primary.PrimaryMult;
 
 public class StatementAssign extends CParseRule {
     // statementAssign ::= primary ASSIGN expression SEMI
-    private CParseRule primary,exper;
+    private CParseRule primary, exper;
     private CToken token;
 
     public StatementAssign(CParseContext pcx) {
@@ -26,6 +29,7 @@ public class StatementAssign extends CParseRule {
         CToken tk = ct.getCurrentToken(pcx);
         primary = new Primary(pcx);
         primary.parse(pcx);
+
         token = tk;
         tk = ct.getCurrentToken(pcx);
         if (!tk.getText().equals("=")) {
@@ -50,22 +54,20 @@ public class StatementAssign extends CParseRule {
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
+        final int s[][] = {
+                // T_err T_int
+                { CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err }, // T_err
+                { CType.T_err, CType.T_int, CType.T_err, CType.T_err, CType.T_err }, // T_int
+                { CType.T_err, CType.T_err, CType.T_pint, CType.T_err, CType.T_err }, // T_pint
+                { CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err }, // T_aint
+                { CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err }, // T_apint
+        };
         if (primary != null && exper != null) {
             primary.semanticCheck(pcx);
             exper.semanticCheck(pcx);
 
-            final int s[][] = {
-                    // T_err T_int
-                    { CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err }, // T_err
-                    { CType.T_err, CType.T_int, CType.T_err, CType.T_err, CType.T_err }, // T_int,T_pint
-                    { CType.T_err, CType.T_err, CType.T_pint, CType.T_err, CType.T_err }, // T_pint
-                    { CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err },
-                    { CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err },
-            };
-
             int primType = primary.getCType().getType();
-            if (primary instanceof PrimaryMult) {
-                System.out.println("hoge");
+            if (((Primary) primary).check()) {
                 if (primary.getCType().isCType(CType.T_pint)) {
                     primType = CType.T_int;
                 }
@@ -85,8 +87,8 @@ public class StatementAssign extends CParseRule {
                         + exper.getCType().toString() + "]は代入できません");
             }
 
-            setCType(primary.getCType()); // number の型をそのままコピー
-            setConstant(primary.isConstant()); // number は常に定数
+            setCType(CType.getCType(nt)); // number の型をそのままコピー
+            setConstant(exper.isConstant() && primary.isConstant()); // number は常に定数
         }
     }
 

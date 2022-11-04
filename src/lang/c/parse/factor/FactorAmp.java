@@ -30,14 +30,8 @@ class FactorAmp extends CParseRule {
             list.parse(pcx);
             factAmp = list;
         } else if (Primary.isFirst(tk)) {
-            // if (PrimaryMult.isFirst(tk)) {
-            // pcx.fatalError("&*~の記法はできません");
-            // }
             list = new Primary(pcx);
             list.parse(pcx);
-            if (list instanceof PrimaryMult) {
-                pcx.fatalError("&*~の記法はできません");
-            }
             factAmp = list;
         } else {
             pcx.fatalError("&のエラーです");
@@ -47,7 +41,12 @@ class FactorAmp extends CParseRule {
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
         factAmp.semanticCheck(pcx);
 
-        if (factAmp.getCType() == CType.getCType(CType.T_pint) || factAmp.getCType() == CType.getCType(CType.T_apint)) {
+        if (factAmp instanceof Primary && ((Primary) factAmp).check()) {
+            pcx.fatalError("&*~の表記はできません");
+        }
+
+        if (factAmp.getCType() == CType.getCType(CType.T_pint)
+                || factAmp.getCType() == CType.getCType(CType.T_apint)) {
             pcx.fatalError("今回はポインタのポインタは使えません");
         }
 

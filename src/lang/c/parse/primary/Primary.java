@@ -13,6 +13,10 @@ public class Primary extends CParseRule {
     public Primary(CParseContext pcx) {
     }
 
+    public boolean check() {
+        return primary == null ? false : primary instanceof PrimaryMult;
+    }
+
     public static boolean isFirst(CToken tk) {
         return PrimaryMult.isFirst(tk) || Variable.isFirst(tk);
     }
@@ -23,7 +27,7 @@ public class Primary extends CParseRule {
         if (PrimaryMult.isFirst(ck)) {
             primary = new PrimaryMult(pcx);
         } else {
-            //System.out.println(ck.getText());
+            // System.out.println(ck.getText());
             primary = new Variable(pcx);
         }
         primary.parse(pcx);
