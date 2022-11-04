@@ -24,18 +24,19 @@ public class Statement extends CParseRule {
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
-        // if (address != null) {
-        //     address.semanticCheck(pcx);
-        //     setCType(address.getCType()); // number の型をそのままコピー
-        //     setConstant(address.isConstant()); // number は常に定数
-        // }
+        if (state != null) {
+            state.semanticCheck(pcx);
+            setCType(state.getCType()); // number の型をそのままコピー
+            setConstant(state.isConstant()); // number は常に定数
+        }
+
     }
 
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
         o.println(";;; state starts");
         if (state != null) {
-            //state.codeGen(pcx);
+            // state.codeGen(pcx);
 
         }
         o.println(";;; state completes");

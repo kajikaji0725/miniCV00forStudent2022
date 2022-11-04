@@ -6,6 +6,7 @@ public class CType {
 	public static final int T_pint = 2; // int*
 	public static final int T_aint = 3; // int[]
 	public static final int T_apint = 4; // int*[]
+	
 
 	private static CType[] typeArray = {
 			new CType(T_err, "error"),

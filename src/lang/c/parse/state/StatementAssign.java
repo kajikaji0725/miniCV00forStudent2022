@@ -55,11 +55,26 @@ public class StatementAssign extends CParseRule {
             primary.semanticCheck(pcx);
             exper.semanticCheck(pcx);
 
+            final int s[][] = {
+                    // T_err T_int
+                    { CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err }, // T_err
+                    { CType.T_err, CType.T_int, CType.T_err, CType.T_err, CType.T_err }, // T_int,T_pint
+                    { CType.T_err, CType.T_err, CType.T_pint, CType.T_err, CType.T_err }, // T_pint
+                    { CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err },
+                    { CType.T_err, CType.T_err, CType.T_err, CType.T_err, CType.T_err },
+            };
+
             CType primType = primary.getCType();
             CType experType = exper.getCType();
 
+            int nt = s[primType.getType()][experType.getType()];
+
             if (primary.isConstant()) {
                 pcx.fatalError(token.toExplainString() + "定数に代入できません");
+            }
+            if (nt == CType.T_err) {
+                pcx.fatalError("左辺の型[" + primType.toString() + "]に右辺の型["
+                        + experType.toString() + "]は代入できません");
             }
 
             setCType(primary.getCType()); // number の型をそのままコピー
