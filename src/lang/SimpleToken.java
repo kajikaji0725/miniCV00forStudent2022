@@ -3,7 +3,7 @@ package lang;
 public class SimpleToken extends Token {
 	public static final int TK_IDENT = 0; // 識別子（ラベル）
 	public static final int TK_NUM = 1; // 数値
-	public static final int TK_AMP = 8; // 数値
+	public static final int TK_AMP = 100; // 数値
 	public static final int TK_EOF = -1; // （ファイルの終端記号）
 	public static final int TK_ILL = -2; // 未定義トークン
 

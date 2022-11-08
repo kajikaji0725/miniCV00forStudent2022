@@ -1,6 +1,37 @@
 package lang.c;
 
-public class CState {
+public class CState
+{
+    public static enum State {
+        S_CLR,
+        S_EOF,
+        S_ERR,
+        S_PLUS,
+        S_MINUS,
+        S_MULT,
+        S_DIV,
+        S_DEC,
+        S_OCT,
+        S_HEX,
+        S_COMMENT,
+        S_LPAR,
+        S_RPAR,
+        S_AMP,
+        S_LBRA,
+        S_RBRA,
+        S_IDENT,
+        S_ASSIGN,
+        S_SEMI,
+        S_LT,
+        S_LE,
+        S_GT,
+        S_GE,
+        S_EQ,
+        S_NE,
+        S_LCUR,
+        S_RCUR;
+    }
+
     public static final int S_EOF = 1;
     public static final int S_ERR = 2;
     public static final int S_PLUS = 3;
@@ -28,4 +59,6 @@ public class CState {
     public static final int S_GE = 25; // >=
     public static final int S_EQ = 26; // ==
     public static final int S_NE = 27; // !=
+    public static final int S_LCUR = 28; // {
+    public static final int S_RCUR = 29; // }
 }
