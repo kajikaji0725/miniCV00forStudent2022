@@ -27,7 +27,6 @@ public class Primary extends CParseRule {
         if (PrimaryMult.isFirst(ck)) {
             primary = new PrimaryMult(pcx);
         } else {
-            // System.out.println(ck.getText());
             primary = new Variable(pcx);
         }
         primary.parse(pcx);

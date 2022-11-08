@@ -70,7 +70,6 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 		in = pctx.getIOContext().getInStream();
 		err = pctx.getIOContext().getErrStream();
 		currentTk = readToken();
-		// System.out.println("Token='" + currentTk.toString());
 		return currentTk;
 	}
 

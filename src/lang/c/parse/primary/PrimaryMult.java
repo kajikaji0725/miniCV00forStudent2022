@@ -31,11 +31,9 @@ public class PrimaryMult extends CParseRule {
         if (variable != null) {
             variable.semanticCheck(pcx);
             CType type = variable.getCType();
-
             if(type.isCType(CType.T_int)){
                 pcx.fatalError("*の変数名はint型ではだめです");
             }
-
             this.setCType(variable.getCType());
             this.setConstant(false);
         }
@@ -45,8 +43,6 @@ public class PrimaryMult extends CParseRule {
         PrintStream o = pcx.getIOContext().getOutStream();
         o.println(";;; PrimaryMult starts");
         if (variable != null) {
-            // o.println("\tMOV\t#" + num.getText() + ", (R6)+\t\t; Number: 数を積む<" +
-            // num.toExplainString() + ">");
             variable.codeGen(pcx);
             o.println("\tMOV\t-(R6), R0\t; PrimaryMult: アドレスを取り出して、内容を参照して、積む<"
                     + op.toExplainString() + ">");

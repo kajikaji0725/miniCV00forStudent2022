@@ -28,7 +28,6 @@ public class Variable extends CParseRule {
             if (Array.isFirst(tk)) {
                 ct.getNextToken(pcx);
                 list = new Array(pcx);
-                // System.out.println(ct.getCurrentToken(pcx).getText());
             } else {
                 break;
             }
@@ -51,14 +50,15 @@ public class Variable extends CParseRule {
                 if (type.isCType(CType.T_int) || type.isCType(CType.T_pint)) {
                     pcx.fatalError("配列を宣言する際は、ia_かipa_です");
                 }
+                this.setCType(CType.changeType(ident.getCType()));
+                this.setConstant(ident.isConstant());
             } else {
                 if (type.isCType(CType.T_aint) || type.isCType(CType.T_apint)) {
                     pcx.fatalError("配列の宣言には[]が必要です");
                 }
+                this.setCType(ident.getCType());
+                this.setConstant(ident.isConstant());
             }
-
-            this.setCType(ident.getCType());
-            this.setConstant(ident.isConstant());
         }
     }
 

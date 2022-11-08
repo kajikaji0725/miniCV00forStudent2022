@@ -6,7 +6,6 @@ public class CType {
 	public static final int T_pint = 2; // int*
 	public static final int T_aint = 3; // int[]
 	public static final int T_apint = 4; // int*[]
-	
 
 	private static CType[] typeArray = {
 			new CType(T_err, "error"),
@@ -38,5 +37,16 @@ public class CType {
 
 	public String toString() {
 		return string;
+	}
+
+	// ia_a,ia_a[]の宣言ができないため
+	public static CType changeType(CType type){
+		if(type.isCType(T_aint)){
+			return getCType(CType.T_int);
+		}else if(type.isCType(T_apint)){
+			return getCType(CType.T_pint);
+		}else{
+			return getCType(CType.T_err);
+		}
 	}
 }

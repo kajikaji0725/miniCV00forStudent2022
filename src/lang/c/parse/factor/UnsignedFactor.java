@@ -37,8 +37,6 @@ public class UnsignedFactor extends CParseRule {
 			} else {
 				ck.getNextToken(pcx);
 			}
-			// System.out.println(ck.getCurrentToken(pcx).getText());
-
 		} else {
 			if (FactorAmp.isFirst(tk)) {
 				unFactor = new FactorAmp(pcx);

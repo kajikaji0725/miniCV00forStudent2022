@@ -24,15 +24,11 @@ public class Program extends CParseRule {
 		// ここにやってくるときは、必ずisFirst()が満たされている
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
-		while (true) {
-			if (Statement.isFirst(tk)) {
-				program = new Statement(pcx);
-			} else {
-				break;
-			}
+		while (Statement.isFirst(tk)) {
+			program = new Statement(pcx);
 			program.parse(pcx);
-			state.add(program);
 			tk = ct.getCurrentToken(pcx);
+			state.add(program);
 		}
 		if (tk.getType() != CToken.TK_EOF) {
 			pcx.fatalError(tk.toExplainString() + "プログラムの最後にゴミがあります");
@@ -40,7 +36,6 @@ public class Program extends CParseRule {
 	}
 
 	public void semanticCheck(CParseContext pcx) throws FatalErrorException {
-		// System.out.println(state);
 		if (program != null) {
 			program.semanticCheck(pcx);
 		}
@@ -55,8 +50,9 @@ public class Program extends CParseRule {
 		if (program != null) {
 			o.println("__START:");
 			o.println("\tMOV\t#0x1000, R6\t; ProgramNode: 計算用スタック初期化");
-			program.codeGen(pcx);
-			o.println("\tMOV\t-(R6), R0\t; ProgramNode: 計算結果確認用");
+			for (CParseRule parseState : state) {
+				parseState.codeGen(pcx);
+			}
 		}
 		o.println("\tHLT\t\t\t; ProgramNode:");
 		o.println("\t.END\t\t\t; ProgramNode:");

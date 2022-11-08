@@ -98,6 +98,9 @@ public class StatementAssign extends CParseRule {
         if (primary != null && exper != null) {
             primary.codeGen(pcx);
             exper.codeGen(pcx);
+            o.println("\tMOV\t-(R6), R0\t; 右辺の値を取り出す");
+            o.println("\tMOV\t-(R6), R0\t; 左辺の値を取り出す");
+            o.println("\tMOV\tR0, (R1)\t; 右辺の値を左辺のアドレス番地に格納する");
         }
         o.println(";;; StatementAssign completes");
     }

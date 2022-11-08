@@ -48,7 +48,6 @@ public class TermDiv extends CParseRule {
 			right.semanticCheck(pcx);
 			int lt = left.getCType().getType(); // +の左辺の型
 			int rt = right.getCType().getType(); // +の右辺の型
-			// System.out.println(right.getCType().getType());
 			int nt = s[lt][rt]; // 規則による型計算
 			if (nt == CType.T_err) {
 				pcx.fatalError(op.toExplainString() + "左辺の型[" + left.getCType().toString() + "]と右辺の型["

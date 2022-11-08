@@ -20,9 +20,7 @@ class MinusFactor extends CParseRule {
 
         CTokenizer ct = pcx.getTokenizer();
         CToken tk = ct.getCurrentToken(pcx);
-        // num = tk;
         tk = ct.getNextToken(pcx);
-        // System.out.println(tk.getType());
         if (tk.getType() == 8) {
             pcx.fatalError("-の後ろに&はおけません");
         }

@@ -18,7 +18,6 @@ public class Statement extends CParseRule {
 
     public void parse(CParseContext pcx) throws FatalErrorException {
         // ここにやってくるときは、必ずisFirst()が満たされている
-        CToken ck = pcx.getTokenizer().getCurrentToken(pcx);
         state = new StatementAssign(pcx);
         state.parse(pcx);
     }
@@ -26,8 +25,8 @@ public class Statement extends CParseRule {
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
         if (state != null) {
             state.semanticCheck(pcx);
-            setCType(state.getCType()); // number の型をそのままコピー
-            setConstant(state.isConstant()); // number は常に定数
+            // setCType(state.getCType()); // number の型をそのままコピー
+            // setConstant(state.isConstant()); // number は常に定数
         }
 
     }
@@ -36,8 +35,7 @@ public class Statement extends CParseRule {
         PrintStream o = pcx.getIOContext().getOutStream();
         o.println(";;; state starts");
         if (state != null) {
-            // state.codeGen(pcx);
-
+            state.codeGen(pcx);
         }
         o.println(";;; state completes");
     }
