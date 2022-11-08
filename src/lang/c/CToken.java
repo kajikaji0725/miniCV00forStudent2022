@@ -14,6 +14,15 @@ public class CToken extends SimpleToken {
 	public static final int TK_IDENT = 10; // indent
 	public static final int TK_ASSIGN = 11; // =
 	public static final int TK_SEMI = 12; // ;
+	public static final int TK_TRUE = 13; // true
+	public static final int TK_FALSE = 14; //false
+	public static final int TK_LT = 15; // <
+	public static final int TK_LE = 16; // <=
+	public static final int TK_GT = 17; // >
+	public static final int TK_GE = 18; // >=
+	public static final int TK_EQ = 19; // ==
+	public static final int TK_NE = 20; // !=
+	
 
 	public CToken(int type, int lineNo, int colNo, String s) {
 		super(type, lineNo, colNo, s);

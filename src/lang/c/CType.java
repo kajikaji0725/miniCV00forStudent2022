@@ -6,6 +6,7 @@ public class CType {
 	public static final int T_pint = 2; // int*
 	public static final int T_aint = 3; // int[]
 	public static final int T_apint = 4; // int*[]
+	public static final int T_bool = 5; // boolean
 
 	private static CType[] typeArray = {
 			new CType(T_err, "error"),
@@ -13,6 +14,7 @@ public class CType {
 			new CType(T_pint, "int*"),
 			new CType(T_aint, "int[]"),
 			new CType(T_apint, "int*[]"),
+			new CType(T_bool, "bool")
 	};
 
 	private int type;
@@ -40,12 +42,12 @@ public class CType {
 	}
 
 	// ia_a,ia_a[]の宣言ができないため
-	public static CType changeType(CType type){
-		if(type.isCType(T_aint)){
+	public static CType changeType(CType type) {
+		if (type.isCType(T_aint)) {
 			return getCType(CType.T_int);
-		}else if(type.isCType(T_apint)){
+		} else if (type.isCType(T_apint)) {
 			return getCType(CType.T_pint);
-		}else{
+		} else {
 			return getCType(CType.T_err);
 		}
 	}

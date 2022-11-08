@@ -40,7 +40,7 @@ public class Ident extends CParseRule {
             type = CType.T_int;
             constantFlag = true;
         } else {
-            pcx.fatalError("変数は、i_ ip_ ia_ ipa_ c_ のどちらかで宣言してください");
+            pcx.fatalError(ident.toExplainString() + "変数は、i_ ip_ ia_ ipa_ c_ のどちらかで宣言してください");
         }
 
         this.setCType(CType.getCType(type));

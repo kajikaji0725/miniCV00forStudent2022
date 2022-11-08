@@ -9,6 +9,15 @@
 ./lang/c/MiniCompiler.java
 ./lang/c/parse/AddressToValue.java
 ./lang/c/parse/Array.java
+./lang/c/parse/condition/Condition.java
+./lang/c/parse/condition/ConditionEQ.java
+./lang/c/parse/condition/ConditionFalse.java
+./lang/c/parse/condition/ConditionGE.java
+./lang/c/parse/condition/ConditionGT.java
+./lang/c/parse/condition/ConditionLE.java
+./lang/c/parse/condition/ConditionLT.java
+./lang/c/parse/condition/ConditionNE.java
+./lang/c/parse/condition/ConditionTrue.java
 ./lang/c/parse/exper/Expression.java
 ./lang/c/parse/exper/ExpressionAdd.java
 ./lang/c/parse/exper/ExpressionSub.java
@@ -28,6 +37,7 @@
 ./lang/c/parse/term/TermDiv.java
 ./lang/c/parse/term/TermMult.java
 ./lang/c/parse/Variable.java
+./lang/c/TestCondition.java
 ./lang/c/TestCToken.java
 ./lang/Compiler.java
 ./lang/FatalErrorException.java

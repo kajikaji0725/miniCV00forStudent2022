@@ -20,4 +20,12 @@ public class CState {
     public static final int S_IDENT = 17; // indent
     public static final int S_ASSIGN = 18; // =
     public static final int S_SEMI = 19; // ;
+    public static final int S_TRUE = 20; // true
+    public static final int S_FALSE = 21; // false
+    public static final int S_LT = 22; // <
+    public static final int S_LE = 23; // <=
+    public static final int S_GT = 24; // >
+    public static final int S_GE = 25; // >=
+    public static final int S_EQ = 26; // ==
+    public static final int S_NE = 27; // !=
 }

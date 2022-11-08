@@ -159,11 +159,50 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 					} else if (ch == '=') {
 						startCol = colNo - 1;
 						text.append(ch);
-						state = CState.S_ASSIGN;
+						char xChar = readChar();
+						if (xChar == '=') {
+							text.append(xChar);
+							state = CState.S_EQ;
+						} else {
+							backChar(xChar);
+							state = CState.S_ASSIGN;
+						}
 					} else if (ch == ';') {
 						startCol = colNo - 1;
 						text.append(ch);
 						state = CState.S_SEMI;
+					} else if (ch == '<') {
+						startCol = colNo - 1;
+						text.append(ch);
+						char xChar = readChar();
+						if (xChar == '=') {
+							text.append(xChar);
+							state = CState.S_LE;
+						} else {
+							state = CState.S_LT;
+							backChar(xChar);
+						}
+					} else if (ch == '>') {
+						startCol = colNo - 1;
+						text.append(ch);
+						char xChar = readChar();
+						if (xChar == '=') {
+							text.append(xChar);
+							state = CState.S_GE;
+						} else {
+							state = CState.S_GT;
+							backChar(xChar);
+						}
+					} else if (ch == '!') {
+						startCol = colNo - 1;
+						text.append(ch);
+						char xChar = readChar();
+						if (xChar == '=') {
+							text.append(xChar);
+							state = CState.S_NE;
+						} else {
+							backChar(xChar);
+						}
 					} else { // ヘンな文字を読んだ
 						startCol = colNo - 1;
 						text.append(ch);
@@ -328,7 +367,9 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 						text.append(ch);
 					} else {
 						backChar(ch); // 変数名ではない文字は戻す（読まなかったことにする)
-						tk = new CToken(CToken.TK_IDENT, lineNo, startCol, text.toString());
+						String s = text.toString();
+						Integer i = (Integer) rule.get(s);
+						tk = new CToken(((i == null) ? CToken.TK_IDENT : i.intValue()), lineNo, startCol, s);
 						accept = true;
 					}
 					break;
@@ -338,6 +379,30 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 					break;
 				case CState.S_SEMI: // ;
 					tk = new CToken(CToken.TK_SEMI, lineNo, startCol, ";");
+					accept = true;
+					break;
+				case CState.S_LT: // <
+					tk = new CToken(CToken.TK_LT, lineNo, startCol, "<");
+					accept = true;
+					break;
+				case CState.S_LE: // <=
+					tk = new CToken(CToken.TK_LE, lineNo, startCol, "<=");
+					accept = true;
+					break;
+				case CState.S_GT: // >
+					tk = new CToken(CToken.TK_GT, lineNo, startCol, ">");
+					accept = true;
+					break;
+				case CState.S_GE: // >=
+					tk = new CToken(CToken.TK_GE, lineNo, startCol, ">=");
+					accept = true;
+					break;
+				case CState.S_EQ: // ==
+					tk = new CToken(CToken.TK_EQ, lineNo, startCol, "==");
+					accept = true;
+					break;
+				case CState.S_NE: // !=
+					tk = new CToken(CToken.TK_NE, lineNo, startCol, "!=");
 					accept = true;
 					break;
 			}
