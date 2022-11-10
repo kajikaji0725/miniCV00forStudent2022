@@ -3,7 +3,7 @@ package lang.c;
 import lang.SimpleToken;
 
 public class CToken extends SimpleToken {
-	
+
 	public static final int TK_PLUS = 2; // +
 	public static final int TK_MINUS = 3; // -
 	public static final int TK_DIV = 4; // /
@@ -30,6 +30,7 @@ public class CToken extends SimpleToken {
 	public static final int TK_LCUR = 25; // {
 	public static final int TK_RCUR = 26; // }
 	public static final int TK_ELSE = 27; // else
+	public static final int TK_ELSEIf = 28; // else if
 
 	public CToken(int type, int lineNo, int colNo, String s) {
 		super(type, lineNo, colNo, s);

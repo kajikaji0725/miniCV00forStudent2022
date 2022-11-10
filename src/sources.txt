@@ -33,6 +33,11 @@
 ./lang/c/parse/Program.java
 ./lang/c/parse/state/Statement.java
 ./lang/c/parse/state/StatementAssign.java
+./lang/c/parse/state/StatementBlock.java
+./lang/c/parse/state/StatementIF.java
+./lang/c/parse/state/StatementInput.java
+./lang/c/parse/state/StatementOutput.java
+./lang/c/parse/state/StatementWhile.java
 ./lang/c/parse/term/Term.java
 ./lang/c/parse/term/TermDiv.java
 ./lang/c/parse/term/TermMult.java
