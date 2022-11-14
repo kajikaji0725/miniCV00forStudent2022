@@ -28,7 +28,7 @@ public class ConditionFalse extends CParseRule {
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
         o.println(";;; FALSE starts");
-        o.println("\tMOV\t#0x0000, R2\t; conditionFALSE: set false");
+        o.println("\tMOV\t#0x0000, (R6)+\t; conditionFALSE: set false");
         o.println(";;; FALSE completes");
     }
 }
