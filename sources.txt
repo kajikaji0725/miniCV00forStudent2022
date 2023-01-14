@@ -1,7 +1,7 @@
 ./src/lang/Assembler.java
 ./src/lang/c/CParseContext.java
 ./src/lang/c/CParseRule.java
-./src/lang/c/CState.java
+./src/lang/c/CState.State.java
 ./src/lang/c/CToken.java
 ./src/lang/c/CTokenizer.java
 ./src/lang/c/CTokenRule.java

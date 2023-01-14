@@ -127,7 +127,25 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 					} else if (ch == '&') {
 						startCol = colNo - 1;
 						text.append(ch);
-						state = CState.State.S_AMP;
+						char xChar = readChar();
+						if (xChar == '&') {
+							text.append(xChar);
+							state = CState.State.S_AND;
+						} else {
+							backChar(xChar);
+							state = CState.State.S_AMP;
+						}
+					} else if (ch == '|') {
+						startCol = colNo - 1;
+						text.append(ch);
+						char xChar = readChar();
+						if (xChar == '|') {
+							text.append(xChar);
+							state = CState.State.S_OR;
+						} else {
+							backChar(xChar);
+							state = CState.State.S_ERR;
+						}
 					} else if (ch == '(') {
 						startCol = colNo - 1;
 						text.append(ch);
@@ -193,6 +211,9 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 						if (xChar == '=') {
 							text.append(xChar);
 							state = CState.State.S_NE;
+						} else if (isIndent(xChar)) {
+							backChar(xChar);
+							state = CState.State.S_EXCLAM;
 						} else {
 							backChar(xChar);
 						}
@@ -404,6 +425,18 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 					break;
 				case S_RCUR: // }
 					tk = new CToken(CToken.TK_RCUR, lineNo, startCol, "}");
+					accept = true;
+					break;
+				case S_AND: // }
+					tk = new CToken(CToken.TK_AND, lineNo, startCol, "&&");
+					accept = true;
+					break;
+				case S_OR: // }
+					tk = new CToken(CToken.TK_OR, lineNo, startCol, "||");
+					accept = true;
+					break;
+				case S_EXCLAM: // }
+					tk = new CToken(CToken.TK_EXCLAM, lineNo, startCol, "!");
 					accept = true;
 					break;
 			}

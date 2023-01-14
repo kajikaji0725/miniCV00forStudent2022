@@ -1,7 +1,6 @@
 package lang.c;
 
-public class CState
-{
+public class CState {
     public static enum State {
         S_CLR,
         S_EOF,
@@ -29,7 +28,10 @@ public class CState
         S_EQ,
         S_NE,
         S_LCUR,
-        S_RCUR;
+        S_RCUR,
+        S_AND,
+        S_OR,
+        S_EXCLAM
     }
 
     public static final int S_EOF = 1;

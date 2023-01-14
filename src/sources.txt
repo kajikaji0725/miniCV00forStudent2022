@@ -17,6 +17,7 @@
 ./lang/c/parse/condition/ConditionLE.java
 ./lang/c/parse/condition/ConditionLT.java
 ./lang/c/parse/condition/ConditionNE.java
+./lang/c/parse/condition/ConditionOpr.java
 ./lang/c/parse/condition/ConditionTrue.java
 ./lang/c/parse/exper/Expression.java
 ./lang/c/parse/exper/ExpressionAdd.java
@@ -28,6 +29,12 @@
 ./lang/c/parse/factor/UnsignedFactor.java
 ./lang/c/parse/Ident.java
 ./lang/c/parse/Number.java
+./lang/c/parse/opr/exper/OprExper.java
+./lang/c/parse/opr/exper/OprOr.java
+./lang/c/parse/opr/factor/OprExc.java
+./lang/c/parse/opr/factor/OprFactor.java
+./lang/c/parse/opr/term/OprAnd.java
+./lang/c/parse/opr/term/OprTerm.java
 ./lang/c/parse/primary/Primary.java
 ./lang/c/parse/primary/PrimaryMult.java
 ./lang/c/parse/Program.java
