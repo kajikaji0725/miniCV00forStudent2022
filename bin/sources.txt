@@ -31,8 +31,8 @@
 ./lang/c/parse/Number.java
 ./lang/c/parse/opr/exper/OprExper.java
 ./lang/c/parse/opr/exper/OprOr.java
+./lang/c/parse/opr/factor/OprExc.java
 ./lang/c/parse/opr/factor/OprFactor.java
-./lang/c/parse/opr/OprExclam.java
 ./lang/c/parse/opr/term/OprAnd.java
 ./lang/c/parse/opr/term/OprTerm.java
 ./lang/c/parse/primary/Primary.java

@@ -1,18 +1,17 @@
-package lang.c.parse.condition;
+package lang.c.parse.state;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
 
 import lang.*;
 import lang.c.*;
-import lang.c.parse.exper.Expression;
 import lang.c.parse.opr.exper.OprExper;
+import lang.c.parse.condition.*;
 
-public class ConditionOpr extends CParseRule {
-    // conditionOpr ::= condition { oprExper }
-    private CParseRule condi, opr;
+public class StateCondition extends CParseRule {
+    // StateCondition ::= { oprExper }
+    private CParseRule condi;
 
-    public ConditionOpr(CParseContext pcx) {
+    public StateCondition(CParseContext pcx) {
     }
 
     public static boolean isFirst(CToken tk) {
@@ -25,18 +24,10 @@ public class ConditionOpr extends CParseRule {
         CToken tk = ct.getCurrentToken(pcx);
 
         tk = ct.getCurrentToken(pcx);
-        if (Condition.isFirst(tk)) {
-            opr = new Condition(pcx);
-        } else {
-            pcx.fatalError(tk.toExplainString() + "conditionOpr condition error");
-        }
-        opr.parse(pcx);
-
-        tk = ct.getCurrentToken(pcx);
         if (OprExper.isFirst(tk)) {
-            System.out.println("hogehoge");
             condi = new OprExper(pcx);
             condi.parse(pcx);
+            tk = ct.getCurrentToken(pcx);
         }
     }
 

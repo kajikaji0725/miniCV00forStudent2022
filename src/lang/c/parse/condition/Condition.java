@@ -11,10 +11,8 @@ public class Condition extends CParseRule {
     // condition ::= TRUE | FALSE | expression ( conditionLT | conditionLE |
     // conditionGT | conditionGE | conditionEQ | conditionNE )
     private CParseRule condi;
-    private ArrayList<CParseRule> oprArr;
 
     public Condition(CParseContext pcx) {
-        oprArr = new ArrayList<CParseRule>();
     }
 
     public static boolean isFirst(CToken tk) {
@@ -25,45 +23,34 @@ public class Condition extends CParseRule {
         // ここにやってくるときは、必ずisFirst()が満たされている
         CTokenizer ct = pcx.getTokenizer();
         CToken tk = ct.getCurrentToken(pcx);
-        condi = new ConditionOpr(pcx);
-        // if (ConditionTrue.isFirst(tk)) {
-        //     condi = new ConditionTrue(pcx);
-        // } else if (ConditionFalse.isFirst(tk)) {
-        //     condi = new ConditionFalse(pcx);
-        // } else if (Expression.isFirst(tk)) {
-        //     CParseRule exper = new Expression(pcx);
-        //     exper.parse(pcx);
+        if (ConditionTrue.isFirst(tk)) {
+            condi = new ConditionTrue(pcx);
+        } else if (ConditionFalse.isFirst(tk)) {
+            condi = new ConditionFalse(pcx);
+        } else if (Expression.isFirst(tk)) {
+            CParseRule exper = new Expression(pcx);
+            exper.parse(pcx);
 
-        //     tk = ct.getCurrentToken(pcx);
-        //     if (ConditionLT.isFirst(tk)) {
-        //         condi = new ConditionLT(pcx, exper);
-        //     } else if (ConditionLE.isFirst(tk)) {
-        //         condi = new ConditionLE(pcx, exper);
-        //     } else if (ConditionGT.isFirst(tk)) {
-        //         condi = new ConditionGT(pcx, exper);
-        //     } else if (ConditionGE.isFirst(tk)) {
-        //         condi = new ConditionGE(pcx, exper);
-        //     } else if (ConditionEQ.isFirst(tk)) {
-        //         condi = new ConditionEQ(pcx, exper);
-        //     } else if (ConditionNE.isFirst(tk)) {
-        //         condi = new ConditionNE(pcx, exper);
-        //     } else {
-        //         pcx.fatalError(tk.toExplainString() + "条件演算子error");
-        //     }
-        // } else {
-        //     pcx.fatalError(tk.toExplainString() + "ConditionTrueかConditionFalseかExpressionが必要です");
-        // }
+            tk = ct.getCurrentToken(pcx);
+            if (ConditionLT.isFirst(tk)) {
+                condi = new ConditionLT(pcx, exper);
+            } else if (ConditionLE.isFirst(tk)) {
+                condi = new ConditionLE(pcx, exper);
+            } else if (ConditionGT.isFirst(tk)) {
+                condi = new ConditionGT(pcx, exper);
+            } else if (ConditionGE.isFirst(tk)) {
+                condi = new ConditionGE(pcx, exper);
+            } else if (ConditionEQ.isFirst(tk)) {
+                condi = new ConditionEQ(pcx, exper);
+            } else if (ConditionNE.isFirst(tk)) {
+                condi = new ConditionNE(pcx, exper);
+            } else {
+                pcx.fatalError(tk.toExplainString() + "条件演算子error");
+            }
+        } else {
+            pcx.fatalError(tk.toExplainString() + "ConditionTrueかConditionFalseかExpressionが必要です");
+        }
         condi.parse(pcx);
-
-        tk = ct.getCurrentToken(pcx);
-        // if (ConditionOpr.isFirst(tk)) {
-        //     while (true) {
-        //         CParseRule opr = new ConditionOpr(pcx);
-        //         opr.parse(pcx);
-        //         oprArr.add(opr);
-        //         tk = ct.getCurrentToken(pcx);
-        //     }
-        // }
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {

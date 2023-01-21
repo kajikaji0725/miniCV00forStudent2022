@@ -6,10 +6,12 @@ import lang.*;
 import lang.c.*;
 
 import lang.c.parse.factor.*;
+import lang.c.parse.condition.*;
 
 public class OprExc extends CParseRule {
-    // oprExclam ::= EXCLAM unsignedFactor
-    private CParseRule plusFactor = null, list = null;
+    // oprExclam ::= EXCLAM Condition
+    private CParseRule condi;
+    private CToken op;
 
     public OprExc(CParseContext pcx) {
     }
@@ -22,29 +24,36 @@ public class OprExc extends CParseRule {
         CTokenizer ct = pcx.getTokenizer();
         CToken tk = ct.getCurrentToken(pcx);
         // num = tk;
+        op = ct.getCurrentToken(pcx);
         tk = ct.getNextToken(pcx);
 
-        if (UnsignedFactor.isFirst(tk)) {
-            list = new UnsignedFactor(pcx);
+        if (Condition.isFirst(tk)) {
+            condi = new Condition(pcx);
         } else {
             // pcx.fatalError("MINUSのあとはnumber、Amp、LPARです");
         }
-        list.parse(pcx);
-        plusFactor = list;
+        condi.parse(pcx);
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
-        if (list != null) {
-            list.semanticCheck(pcx);
-            this.setCType(CType.getCType(CType.T_int));
-            this.setConstant(true);
+        if (condi != null) {
+            condi.semanticCheck(pcx);
+            if (condi.getCType().getType() == CType.getCType(CType.T_bool).getType()) {
+                this.setCType(condi.getCType());
+                this.setConstant(condi.isConstant());
+            } else {
+                pcx.fatalError("条件演算子[" + op.getText() + "]の後ろはboolです");
+            }
         }
     }
 
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
-        if (plusFactor != null && list != null) {
-            list.codeGen(pcx);
+        if (condi != null) {
+            condi.codeGen(pcx);
+            o.println("\tMOV\t-(R6), R0\t; OprExc:  反転する<" + op.getText() + ">");
+            o.println("\tXOR\t#0x0001, R0\t; OprExc:");
+            o.println("\tMOV\tR0, (R6)+\t; OprExc:");
         }
     }
 }

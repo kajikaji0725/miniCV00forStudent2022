@@ -23,6 +23,8 @@ public class ConditionTrue extends CParseRule {
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
+        setCType(CType.getCType(CType.T_bool));
+        setConstant(true);
     }
 
     public void codeGen(CParseContext pcx) throws FatalErrorException {

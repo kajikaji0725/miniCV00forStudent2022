@@ -21,8 +21,6 @@ public class TermDiv extends CParseRule {
 
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
-		// factor = new Factor(pcx);
-		// factor.parse(pcx);
 		CTokenizer ct = pcx.getTokenizer();
 		op = ct.getCurrentToken(pcx);
 		CToken tk = ct.getNextToken(pcx);

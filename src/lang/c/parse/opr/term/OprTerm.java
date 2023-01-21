@@ -18,43 +18,24 @@ public class OprTerm extends CParseRule {
     }
 
     public void parse(CParseContext pcx) throws FatalErrorException {
+        // ここにやってくるときは、必ずisFirst()が満たされている
         CParseRule list = null, factor = null;
         factor = new OprFactor(pcx);
         factor.parse(pcx);
 
         CTokenizer ct = pcx.getTokenizer();
         CToken tk = ct.getCurrentToken(pcx);
-        while(true){
-            if(OprAnd.isFirst(tk)){
+        while (true) {
+            if (OprAnd.isFirst(tk)) {
                 list = new OprAnd(factor);
-            }else{
+            } else {
                 break;
             }
             list.parse(pcx);
             factor = list;
-            tk=ct.getCurrentToken(pcx);
+            tk = ct.getCurrentToken(pcx);
         }
         term = factor;
-        // ここにやってくるときは、必ずisFirst()が満たされている
-        // CParseRule list = null, factor = null;
-        // factor = new Factor(pcx);
-        // factor.parse(pcx);
-
-        // CTokenizer ct = pcx.getTokenizer();
-        // CToken tk = ct.getCurrentToken(pcx);
-        // while (true) {
-        // if (TermDiv.isFirst(tk)) {
-        // list = new TermDiv(factor);
-        // } else if (TermMult.isFirst(tk)) {
-        // list = new TermMult(factor);
-        // } else {
-        // break;
-        // }
-        // list.parse(pcx);
-        // factor = list;
-        // tk = ct.getCurrentToken(pcx);
-        // }
-        // term = factor;
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {

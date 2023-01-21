@@ -5,10 +5,9 @@ import java.io.PrintStream;
 import lang.*;
 import lang.c.*;
 import lang.c.parse.condition.Condition;
-import lang.c.parse.condition.ConditionOpr;
 
 public class StatementIF extends CParseRule {
-    // statementIF ::= IF LPAR ConditionOpr RPAR StatementBlock [ else
+    // statementIF ::= IF LPAR StateCondion RPAR StatementBlock [ else
     // StatementBlock ]
     private CParseRule condi, stateIF, stateElse;
 
@@ -27,7 +26,7 @@ public class StatementIF extends CParseRule {
 
         if (tk.getType() == CToken.TK_LPAR) {
             tk = ct.getNextToken(pcx);
-            condi = new ConditionOpr(pcx);
+            condi = new StateCondition(pcx);
             condi.parse(pcx);
         } else {
             pcx.fatalError(tk.toExplainString() + "LPAR error");
