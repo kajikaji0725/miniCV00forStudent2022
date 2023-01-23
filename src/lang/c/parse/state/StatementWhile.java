@@ -7,7 +7,7 @@ import lang.c.*;
 import lang.c.parse.condition.Condition;
 
 public class StatementWhile extends CParseRule {
-    // statementIF ::= while LPAR condition RPAR StatementBlock
+    // statementIF ::= while LPAR StateCondition RPAR StatementBlock
     private CParseRule condi, stateWhile;
 
     public StatementWhile(CParseContext pcx) {
@@ -25,7 +25,7 @@ public class StatementWhile extends CParseRule {
 
         if (tk.getType() == CToken.TK_LPAR) {
             tk = ct.getNextToken(pcx);
-            condi = new Condition(pcx);
+            condi = new StateCondition(pcx);
             condi.parse(pcx);
         } else {
             pcx.fatalError(tk.toExplainString() + "LPAR error");

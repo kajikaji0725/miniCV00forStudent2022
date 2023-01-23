@@ -53,14 +53,10 @@ public class OprOr extends CParseRule {
         if (left != null && right != null) {
             left.codeGen(pcx); // 左部分木のコード生成を頼む
             right.codeGen(pcx); // 右部分木のコード生成を頼む
-            seq = pcx.getSeqId();
             o.println("\tMOV\t-(R6), R0\t; OprOr: OR条件判定 どちらかが真<" + op.getText() + ">");
             o.println("\tMOV\t-(R6), R1\t; OprOr:");
-            o.println("\tADD\tR1, R0\t;    OprOr:");
-            o.println("\tMOV\t#0x0001, R2\t; conditionGE: set true");
-            o.println("\tBRZ\tGE" + seq + "\t; conditionGE:  もし0だったら偽、1以上だったら真");
-            o.println("\tCLR\tR2\t\t; conditionGE: set false");
-            o.println("GE" + seq + ":\tMOV\tR2, (R6)+\t; conditionGE:");
+            o.println("\tOR\tR1, R0\t;    OprOr:");
+            o.println("\tMOV\tR0, (R6)+\t; OprOr:");
         }
     }
 }

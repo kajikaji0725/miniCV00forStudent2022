@@ -56,13 +56,8 @@ public class OprAnd extends CParseRule {
             right.codeGen(pcx);
             o.println("\tMOV\t-(R6), R0\t; OprAnd: AND条件判定 両方真<" + op.getText() + ">");
             o.println("\tMOV\t-(R6), R1\t; OprAnd:");
-            o.println("\tADD\tR1, R0\t;    OprAnd:");
-            o.println("\tMOV\t#0x0001, R2\t; OprAnd: set true");
-            o.println("\tCMP\tR0, #0x0002\t; OprAnd: R0 == 0x0002 -> 0 == 0x0002-R0");
-            o.println("\tBRZ\tGE" + seq + "\t; OprAnd");
-            o.println("\tCLR\tR2\t\t; OprAnd: set false");
-            o.println("GE" + seq + ":\tMOV\tR2, (R6)+\t; OprAnd:");
-            o.println("\tMOV\t-(R6), R1\t; OprAnd:");
+            o.println("\tAND\tR1, R0\t;    OprAnd:");
+            o.println("\tMOV\tR0, (R6)+\t; OprAnd:");
         }
         o.println(";;; OprAnd completes");
     }
