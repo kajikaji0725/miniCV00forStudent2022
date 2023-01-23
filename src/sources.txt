@@ -57,6 +57,7 @@
 ./lang/LL1.java
 ./lang/ParseContext.java
 ./lang/ParseRule.java
+./lang/RecoverableErrorException.java
 ./lang/SimpleParseContext.java
 ./lang/SimpleToken.java
 ./lang/SimpleTokenizer.java

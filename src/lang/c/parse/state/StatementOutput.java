@@ -38,7 +38,7 @@ public class StatementOutput extends CParseRule {
         if (tk.getType() == CToken.TK_SEMI) {
             tk = ct.getNextToken(pcx);
         } else {
-            pcx.fatalError(tk.toExplainString() + "セミコロンが必要");
+            pcx.recoverableError(tk.toExplainString() + "セミコロンが必要");
         }
     }
 

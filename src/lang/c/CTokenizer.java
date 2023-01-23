@@ -17,6 +17,8 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 	private int lineNo, colNo;
 	private char backCh;
 	private boolean backChExist = false;
+	// 現在読み込まれているトークンを返す
+	private CToken currentTk = null;
 
 	public CTokenizer(CTokenRule rule) {
 		this.rule = rule;
@@ -58,8 +60,16 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 		}
 	}
 
-	// 現在読み込まれているトークンを返す
-	private CToken currentTk = null;
+	public void skipTo(CParseContext pctx, int token1, int token2) {
+		in = pctx.getIOContext().getInStream();
+		err = pctx.getIOContext().getErrStream();
+		char ch;
+		do {
+			ch = readChar();
+		} while (ch != token1 || ch != token2 || ch != '\n');
+		++lineNo;
+		colNo = 0;
+	}
 
 	public CToken getCurrentToken(CParseContext pctx) {
 		return currentTk;

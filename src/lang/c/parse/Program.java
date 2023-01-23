@@ -25,14 +25,26 @@ public class Program extends CParseRule {
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
 		while (Statement.isFirst(tk)) {
+			try{
 			program = new Statement(pcx);
 			program.parse(pcx);
-			tk = ct.getCurrentToken(pcx);
 			state.add(program);
+			}catch(RecoverableErrorException e){
+				ct.skipTo(pcx, CToken.TK_SEMI, CToken.TK_RCUR);
+				tk = ct.getNextToken(pcx);
+			}
+			tk = ct.getCurrentToken(pcx);
 		}
 		if (tk.getType() != CToken.TK_EOF) {
 			pcx.fatalError(tk.toExplainString() + "プログラムの最後にゴミがあります");
 		}
+
+		if(tk.getType() == CToken.TK_RCUR){
+			tk = ct.getNextToken(pcx);
+		}else{
+			pcx.warning("}が閉じていませんので補いました");
+		}
+
 	}
 
 	public void semanticCheck(CParseContext pcx) throws FatalErrorException {
