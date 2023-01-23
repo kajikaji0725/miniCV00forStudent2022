@@ -34,29 +34,6 @@ public class OprExper extends CParseRule {
             tk = ct.getCurrentToken(pcx);
         }
         expression = term;
-        // ここにやってくるときは、必ずisFirst()が満たされている
-        // CParseRule term = null, list = null;
-        // term = new Term(pcx);
-        // term.parse(pcx);
-        // CTokenizer ct = pcx.getTokenizer();
-        // CToken tk = ct.getCurrentToken(pcx);
-        // while (true) {
-        // if (ExpressionAdd.isFirst(tk)) {
-        // list = new ExpressionAdd(pcx, term);
-        // } else if (ExpressionSub.isFirst(tk)) {
-        // list = new ExpressionSub(pcx, term);
-        // } else if (tk.getText().isEmpty()) {
-        // tk = ct.getNextToken(pcx);
-        // // System.out.println(tk.getText());
-        // continue;
-        // } else {
-        // break;
-        // }
-        // list.parse(pcx);
-        // term = list;
-        // tk = ct.getCurrentToken(pcx);
-        // }
-        // expression = term;
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {

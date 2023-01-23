@@ -8,7 +8,7 @@ import lang.c.parse.opr.exper.OprExper;
 import lang.c.parse.condition.*;
 
 public class StateCondition extends CParseRule {
-    // StateCondition ::= { oprExper }
+    // StateCondition ::=  oprExper 
     private CParseRule condi;
 
     public StateCondition(CParseContext pcx) {
