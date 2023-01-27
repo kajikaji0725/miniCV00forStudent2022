@@ -17,7 +17,6 @@
 ./lang/c/parse/condition/ConditionLE.java
 ./lang/c/parse/condition/ConditionLT.java
 ./lang/c/parse/condition/ConditionNE.java
-./lang/c/parse/condition/ConditionOpr.java
 ./lang/c/parse/condition/ConditionTrue.java
 ./lang/c/parse/exper/Expression.java
 ./lang/c/parse/exper/ExpressionAdd.java
@@ -38,6 +37,7 @@
 ./lang/c/parse/primary/Primary.java
 ./lang/c/parse/primary/PrimaryMult.java
 ./lang/c/parse/Program.java
+./lang/c/parse/state/StateCondition.java
 ./lang/c/parse/state/Statement.java
 ./lang/c/parse/state/StatementAssign.java
 ./lang/c/parse/state/StatementBlock.java
@@ -57,6 +57,7 @@
 ./lang/LL1.java
 ./lang/ParseContext.java
 ./lang/ParseRule.java
+./lang/RecoverableErrorException.java
 ./lang/SimpleParseContext.java
 ./lang/SimpleToken.java
 ./lang/SimpleTokenizer.java

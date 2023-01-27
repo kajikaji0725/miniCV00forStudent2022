@@ -36,6 +36,7 @@ public class Statement extends CParseRule {
         } else {
             pcx.fatalError("statement error");
         }
+
         state.parse(pcx);
     }
 

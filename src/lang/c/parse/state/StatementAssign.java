@@ -33,7 +33,7 @@ public class StatementAssign extends CParseRule {
         token = tk;
         tk = ct.getCurrentToken(pcx);
         if (!tk.getText().equals("=")) {
-            pcx.fatalError(tk.toExplainString() + "=が必要です");
+            pcx.recoverableError(tk.toExplainString() + "=が必要です");
         }
         ct.getNextToken(pcx);
         tk = ct.getCurrentToken(pcx);
@@ -46,7 +46,7 @@ public class StatementAssign extends CParseRule {
 
         tk = ct.getCurrentToken(pcx);
         if (!tk.getText().equals(";")) {
-            pcx.fatalError(tk.toExplainString() + "experのあとは;です");
+            pcx.warning(tk.toExplainString() + "experのあとは;です。\n 「;」を補いました");
         }
 
         ct.getNextToken(pcx);

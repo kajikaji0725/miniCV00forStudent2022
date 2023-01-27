@@ -7,7 +7,7 @@ import lang.c.*;
 import lang.c.parse.condition.Condition;
 
 public class StatementIF extends CParseRule {
-    // statementIF ::= IF LPAR StateCondion RPAR StatementBlock [ else
+    // statementIF ::= IF LPAR StateCondition RPAR StatementBlock [ else
     // StatementBlock ]
     private CParseRule condi, stateIF, stateElse;
 

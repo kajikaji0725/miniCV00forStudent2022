@@ -34,16 +34,23 @@ public class StatementBlock extends CParseRule {
         } else {
             tk = ct.getNextToken(pcx);
             while (Statement.isFirst(tk)) {
-                list = new Statement(pcx);
-                list.parse(pcx);
-                stateBlocks.add(list);
-                tk = ct.getCurrentToken(pcx);
+                try {
+                    list = new Statement(pcx);
+                    list.parse(pcx);
+                    stateBlocks.add(list);
+                    tk = ct.getCurrentToken(pcx);
+                } catch (RecoverableErrorException e) {
+                    tk = ct.skipTo(pcx);
+                    // tk = ct.getNextToken(pcx);
+                }
             }
-            tk = ct.getCurrentToken(pcx);
-            if (tk.getType() != CToken.TK_RCUR) {
-                pcx.fatalError(tk.toExplainString() + "RCUR error");
+            // tk = ct.getCurrentToken(pcx);
+            if (tk.getType() == CToken.TK_RCUR) {
+                tk = ct.getNextToken(pcx);
+            } else {
+                pcx.warning(tk.toExplainString() + "}が閉じていませんので補いました");
             }
-            tk = ct.getNextToken(pcx);
+
         }
     }
 

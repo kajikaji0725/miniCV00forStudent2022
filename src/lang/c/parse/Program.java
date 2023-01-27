@@ -30,21 +30,13 @@ public class Program extends CParseRule {
 			program.parse(pcx);
 			state.add(program);
 			}catch(RecoverableErrorException e){
-				ct.skipTo(pcx, CToken.TK_SEMI, CToken.TK_RCUR);
-				tk = ct.getNextToken(pcx);
+				System.out.println("hoge");
 			}
 			tk = ct.getCurrentToken(pcx);
 		}
 		if (tk.getType() != CToken.TK_EOF) {
 			pcx.fatalError(tk.toExplainString() + "プログラムの最後にゴミがあります");
 		}
-
-		if(tk.getType() == CToken.TK_RCUR){
-			tk = ct.getNextToken(pcx);
-		}else{
-			pcx.warning("}が閉じていませんので補いました");
-		}
-
 	}
 
 	public void semanticCheck(CParseContext pcx) throws FatalErrorException {

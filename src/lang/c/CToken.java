@@ -34,6 +34,8 @@ public class CToken extends SimpleToken {
 	public static final int TK_EXCLAM = 29; // !
 	public static final int TK_AND = 30; // &&
 	public static final int TK_OR = 31; // ||
+	public static final int TK_INT = 32; // int
+	public static final int TK_CONST = 33; //const
 
 	public CToken(int type, int lineNo, int colNo, String s) {
 		super(type, lineNo, colNo, s);

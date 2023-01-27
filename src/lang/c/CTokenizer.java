@@ -60,15 +60,19 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 		}
 	}
 
-	public void skipTo(CParseContext pctx, int token1, int token2) {
+	public CToken skipTo(CParseContext pctx) {
 		in = pctx.getIOContext().getInStream();
 		err = pctx.getIOContext().getErrStream();
-		char ch;
-		do {
-			ch = readChar();
-		} while (ch != token1 || ch != token2 || ch != '\n');
+		CTokenizer ct = pctx.getTokenizer();
+		CToken tk = ct.getCurrentToken(pctx);
+		CToken ch = tk;
+		while (ch.getType() != CToken.TK_SEMI && ch.getType() != CToken.TK_RCUR && ch.getType() != CToken.TK_ELSE) {
+			ch = readToken();
+			System.out.println(ch.getText());
+		}
 		++lineNo;
 		colNo = 0;
+		return ch;
 	}
 
 	public CToken getCurrentToken(CParseContext pctx) {
