@@ -22,7 +22,7 @@ public class Array extends CParseRule {
         CTokenizer ct = pcx.getTokenizer();
         CToken tk = ct.getCurrentToken(pcx);
 
-        tk = ct.getCurrentToken(pcx);
+        tk = ct.getNextToken(pcx);
         exp = new Expression(pcx);
         exp.parse(pcx);
         tk = ct.getCurrentToken(pcx);

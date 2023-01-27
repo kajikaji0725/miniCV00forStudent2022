@@ -33,7 +33,7 @@ public class StatementAssign extends CParseRule {
         token = tk;
         tk = ct.getCurrentToken(pcx);
         if (!tk.getText().equals("=")) {
-            pcx.recoverableError(tk.toExplainString() + "=が必要です");
+            pcx.fatalError(tk.toExplainString() + "=が必要です");
         }
         ct.getNextToken(pcx);
         tk = ct.getCurrentToken(pcx);

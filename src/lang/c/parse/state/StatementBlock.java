@@ -34,15 +34,10 @@ public class StatementBlock extends CParseRule {
         } else {
             tk = ct.getNextToken(pcx);
             while (Statement.isFirst(tk)) {
-                try {
-                    list = new Statement(pcx);
-                    list.parse(pcx);
-                    stateBlocks.add(list);
-                    tk = ct.getCurrentToken(pcx);
-                } catch (RecoverableErrorException e) {
-                    tk = ct.skipTo(pcx);
-                    // tk = ct.getNextToken(pcx);
-                }
+                list = new Statement(pcx);
+                list.parse(pcx);
+                stateBlocks.add(list);
+                tk = ct.getCurrentToken(pcx);
             }
             // tk = ct.getCurrentToken(pcx);
             if (tk.getType() == CToken.TK_RCUR) {

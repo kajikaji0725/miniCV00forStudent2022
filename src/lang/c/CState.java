@@ -31,7 +31,8 @@ public class CState {
         S_RCUR,
         S_AND,
         S_OR,
-        S_EXCLAM
+        S_EXCLAM,
+        S_COMMA
     }
 
     public static final int S_EOF = 1;
@@ -63,4 +64,5 @@ public class CState {
     public static final int S_NE = 27; // !=
     public static final int S_LCUR = 28; // {
     public static final int S_RCUR = 29; // }
+    public static final int S_COMMA = 30; // ,
 }

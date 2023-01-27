@@ -1,6 +1,8 @@
 package lang.c.parse.decl;
 
 import java.io.PrintStream;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import lang.*;
 import lang.c.*;
@@ -8,7 +10,8 @@ import lang.c.parse.factor.Factor;
 
 public class IntDecl extends CParseRule {
     // intDecl ::= INT declItem { COMMA declItem } SEMI
-    private CParseRule intDecl;
+    private CParseRule declItem;
+    private ArrayList<CParseRule> intDelcs = new ArrayList<CParseRule>();
 
     public IntDecl(CParseContext pcx) {
     }
@@ -24,30 +27,42 @@ public class IntDecl extends CParseRule {
 
         tk = ct.getNextToken(pcx);
 
-        if (IntDecl.isFirst(tk)) {
-            intDecl = new IntDecl(pcx);
+        if (DeclItem.isFirst(tk)) {
+            declItem = new DeclItem(pcx);
         } else {
             pcx.fatalError(tk.toExplainString() + "intDecl error");
         }
-        intDecl.parse(pcx);
+        declItem.parse(pcx);
+        intDelcs.add(declItem);
 
         tk = ct.getCurrentToken(pcx);
-        while(true){
-            
+        while (tk.getType() == CToken.TK_COMMA) {
+            tk = ct.getNextToken(pcx);
+            declItem = new DeclItem(pcx);
+            declItem.parse(pcx);
+            intDelcs.add(declItem);
+
+            tk = ct.getCurrentToken(pcx);
         }
 
+        if (tk.getType() != CToken.TK_SEMI) {
+            pcx.fatalError(tk.toExplainString() + "セミコロンが必要です");
+        }
+        tk = ct.getNextToken(pcx);
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
-
+        for (CParseRule intDelc : intDelcs) {
+            intDelc.semanticCheck(pcx);
+        }
     }
 
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
-        o.println(";;; term starts");
-        // if (term != null) {
-        // term.codeGen(pcx);
-        // }
-        o.println(";;; term completes");
+        o.println(";;; IntDecl starts");
+        for (CParseRule intDelc : intDelcs) {
+            intDelc.codeGen(pcx);
+        }
+        o.println(";;; IntDecl completes");
     }
 }

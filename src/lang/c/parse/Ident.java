@@ -8,6 +8,7 @@ import lang.c.*;
 public class Ident extends CParseRule {
     // ident ::= Ident
     private CToken ident;
+    private CSymbolTableEntry entry;
 
     public Ident(CParseContext pcx) {
     }
@@ -20,38 +21,24 @@ public class Ident extends CParseRule {
         CTokenizer ct = pcx.getTokenizer();
         CToken tk = ct.getCurrentToken(pcx);
         ident = tk;
+
+        entry = pcx.getSymbolTable().search(ident.getText());
+        if (entry == null) {
+            pcx.fatalError(ident.toExplainString() + "変数名" + ident.getText() + "は宣言されていません");
+        }
         tk = ct.getNextToken(pcx);
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
-        String text = ident.getText();
-        int type = 0;
-        boolean constantFlag = false;
-
-        if (text.length() > 2 && text.substring(0, 2).equals("i_")) {
-            type = CType.T_int;
-        } else if (text.length() > 3 && text.substring(0, 3).equals("ip_")) {
-            type = CType.T_pint;
-        } else if (text.length() > 3 && text.substring(0, 3).equals("ia_")) {
-            type = CType.T_aint;
-        } else if (text.length() > 3 && text.substring(0, 4).equals("ipa_")) {
-            type = CType.T_apint;
-        } else if (text.length() > 2 && text.substring(0, 2).equals("c_")) {
-            type = CType.T_int;
-            constantFlag = true;
-        } else {
-            pcx.fatalError(ident.toExplainString() + "変数は、i_ ip_ ia_ ipa_ c_ のどちらかで宣言してください");
-        }
-
-        this.setCType(CType.getCType(type));
-        this.setConstant(constantFlag);
+        this.setCType(entry.getType());
+        this.setConstant(entry.isConst());
     }
 
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
         o.println(";;; Ident starts");
         if (ident != null) {
-            o.println("\tMOV\t#" + ident.getText() + ", (R6)+\t; Ident: 変数アドレスを積む<"
+            o.println("\tMOV\t#" + ident.getText() + ", (R6)+\t; Ident: 大域変数アドレスを積む<"
                     + ident.toExplainString() + ">");
         }
         o.println(";;; Ident completes");
