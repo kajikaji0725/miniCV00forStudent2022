@@ -62,6 +62,8 @@ public class ConstItem extends CParseRule {
         if (ret != null) {
             pcx.fatalError(name.toExplainString() + "変数名" + name.getText() + "は使用されています");
         }
+
+        entry = table.search(name.getText()); // Globalか否かは一回searchしないとわからない
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
@@ -73,8 +75,15 @@ public class ConstItem extends CParseRule {
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
         o.println(";;; ConstItem starts");
-        o.print(name.getText() + ":");
-        o.println("\t.WORD\t" + value + "\t;");
+        if (entry.isGlobal()) {
+            o.print(name.getText() + ":");
+            o.println("\t.WORD\t" + value + "\t;");
+        } else {
+            // 定数は値を代入するため、レジスタへの退避が必要
+            o.println("\tMOV\tR4,R3\t; ConstItem; フレームポインタをR3へ");
+            o.println("\tADD\t#" + entry.getAddress() + ",R3\t; ConstItem; 局所変数のaddress分移動");
+            o.println("\tMOV\t#" + value + ", (R3)\t; ConstItem;局所変数に代入(定数)");
+        }
         o.println(";;; ConstItem completes");
     }
 }

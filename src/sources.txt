@@ -23,6 +23,7 @@
 ./lang/c/parse/decl/ConstDecl.java
 ./lang/c/parse/decl/ConstItem.java
 ./lang/c/parse/decl/Declaration.java
+./lang/c/parse/decl/DeclBlock.java
 ./lang/c/parse/decl/DeclItem.java
 ./lang/c/parse/decl/IntDecl.java
 ./lang/c/parse/exper/Expression.java

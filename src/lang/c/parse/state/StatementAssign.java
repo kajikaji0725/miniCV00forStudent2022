@@ -15,6 +15,7 @@ public class StatementAssign extends CParseRule {
     // statementAssign ::= primary ASSIGN expression SEMI
     private CParseRule primary, exper;
     private CToken token;
+    private CSymbolTableEntry entry;
 
     public StatementAssign(CParseContext pcx) {
     }
@@ -29,6 +30,9 @@ public class StatementAssign extends CParseRule {
         CToken tk = ct.getCurrentToken(pcx);
         primary = new Primary(pcx);
         primary.parse(pcx);
+
+        CSymbolTable table = pcx.getSymbolTable();
+        entry = table.search(tk.getText());
 
         token = tk;
         tk = ct.getCurrentToken(pcx);
@@ -79,7 +83,7 @@ public class StatementAssign extends CParseRule {
 
             int nt = s[primType][experType];
 
-            if (primary.isConstant()) {
+            if (entry.isConst()) {
                 pcx.fatalError(token.toExplainString() + "定数に代入できません");
             }
             if (nt == CType.T_err) {
@@ -88,7 +92,7 @@ public class StatementAssign extends CParseRule {
             }
 
             setCType(CType.getCType(nt)); // number の型をそのままコピー
-            setConstant(exper.isConstant() && primary.isConstant()); // number は常に定数
+            setConstant(exper.isConstant() && entry.isConst()); // number は常に定数
         }
     }
 

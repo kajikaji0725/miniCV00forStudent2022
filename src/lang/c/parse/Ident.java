@@ -38,8 +38,14 @@ public class Ident extends CParseRule {
         PrintStream o = pcx.getIOContext().getOutStream();
         o.println(";;; Ident starts");
         if (ident != null) {
-            o.println("\tMOV\t#" + ident.getText() + ", (R6)+\t; Ident: 大域変数アドレスを積む<"
-                    + ident.toExplainString() + ">");
+            if (entry.isGlobal()) {
+                o.println("\tMOV\t#" + ident.getText() + ",(R6)+\t; Ident: 大域変数のアドレスをスタックへ");
+            } else {
+                o.println("\tMOV\tR4,R3\t; ConstItem; フレームポインタをR3へ");
+                o.println("\tADD\t#" + entry.getAddress() + ",R3\t; Ident: 局所変数の番地を加算");
+                o.println("\tMOV\tR3,(R6)+\t; Ident: 局所変数アドレスを積む<"
+                        + ident.toExplainString() + ">");
+            }
         }
         o.println(";;; Ident completes");
     }

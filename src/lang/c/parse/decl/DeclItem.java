@@ -12,6 +12,7 @@ public class DeclItem extends CParseRule {
     private CToken name;
     private int size;
     private CType type = CType.getCType(CType.T_int);
+    private CSymbolTableEntry entry;
 
     public DeclItem(CParseContext pcx) {
     }
@@ -60,6 +61,7 @@ public class DeclItem extends CParseRule {
             pcx.fatalError(name.toExplainString() + "変数名" + name.getText() + "は使用されています");
         }
 
+        entry = table.search(name.getText());
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
@@ -69,12 +71,14 @@ public class DeclItem extends CParseRule {
     public void codeGen(CParseContext pcx) throws FatalErrorException {
         PrintStream o = pcx.getIOContext().getOutStream();
         o.println(";;; DeclItem starts");
-        o.print(name.getText() + ":");
-        if (type.equals(CType.getCType(CType.T_aint))) {
-            o.println("\t.BLKW\t" + size + "\t;");
-        } else {
-            o.println("\t.WORD\t0\t;");
+        if (entry.isGlobal()) {
+            o.print(name.getText() + ":");
+            if (type.equals(CType.getCType(CType.T_aint))) {
+                o.println("\t.BLKW\t" + size + "\t;");
+            } else {
+                o.println("\t.WORD\t0\t;");
+            }
+            o.println(";;; DeclItem completes");
         }
-        o.println(";;; DeclItem completes");
     }
 }

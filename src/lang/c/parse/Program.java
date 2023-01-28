@@ -5,22 +5,23 @@ import java.util.ArrayList;
 
 import lang.*;
 import lang.c.*;
+import lang.c.parse.decl.DeclBlock;
 import lang.c.parse.decl.Declaration;
 import lang.c.parse.state.Statement;
 
 public class Program extends CParseRule {
-    // program ::= {declaration} { statement } EOF
+    // program ::= {declaration} { declBlock } EOF
     private CParseRule program;
     private ArrayList<CParseRule> declarations;
-    private ArrayList<CParseRule> states;
+    private ArrayList<CParseRule> declBlocks;
 
     public Program(CParseContext pcx) {
-        states = new ArrayList<CParseRule>();
+        declBlocks = new ArrayList<CParseRule>();
         declarations = new ArrayList<CParseRule>();
     }
 
     public static boolean isFirst(CToken tk) {
-        return Declaration.isFirst(tk) || Statement.isFirst(tk);
+        return Declaration.isFirst(tk) || DeclBlock.isFirst(tk);
     }
 
     public void parse(CParseContext pcx) throws FatalErrorException {
@@ -33,10 +34,10 @@ public class Program extends CParseRule {
             declarations.add(program);
             tk = ct.getCurrentToken(pcx);
         }
-        while (Statement.isFirst(tk)) {
-            program = new Statement(pcx);
+        while (DeclBlock.isFirst(tk)) {
+            program = new DeclBlock(pcx);
             program.parse(pcx);
-            states.add(program);
+            declBlocks.add(program);
             tk = ct.getCurrentToken(pcx);
         }
         if (tk.getType() != CToken.TK_EOF) {
@@ -45,11 +46,11 @@ public class Program extends CParseRule {
     }
 
     public void semanticCheck(CParseContext pcx) throws FatalErrorException {
-        for (CParseRule state : states) {
-            state.semanticCheck(pcx);
-        }
         for (CParseRule declaration : declarations) {
             declaration.semanticCheck(pcx);
+        }
+        for (CParseRule declBlock : declBlocks) {
+            declBlock.semanticCheck(pcx);
         }
     }
 
@@ -65,8 +66,9 @@ public class Program extends CParseRule {
         if (program != null) {
             o.println("__START:");
             o.println("\tMOV\t#0x1000, R6\t; ProgramNode: 計算用スタック初期化");
-            for (CParseRule parseState : states) {
-                parseState.codeGen(pcx);
+            o.println("\tMOV\tR6,R4\t; ProgramNode; フレームポインタ初期化");
+            for (CParseRule declBlock : declBlocks) {
+                declBlock.codeGen(pcx);
             }
         }
         o.println("\tHLT\t\t\t; ProgramNode:");
