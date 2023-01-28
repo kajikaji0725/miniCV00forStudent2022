@@ -46,7 +46,7 @@ public class StatementAssign extends CParseRule {
 
         tk = ct.getCurrentToken(pcx);
         if (!tk.getText().equals(";")) {
-            pcx.fatalError(tk.toExplainString() + "experのあとは;です");
+            pcx.warning(tk.toExplainString() + "experのあとは;です :セミコロンを付け加えました");
         }
 
         ct.getNextToken(pcx);
@@ -80,10 +80,10 @@ public class StatementAssign extends CParseRule {
             int nt = s[primType][experType];
 
             if (primary.isConstant()) {
-                pcx.fatalError(token.toExplainString() + "定数に代入できません");
+                pcx.warning(token.toExplainString() + "定数に代入できません");
             }
             if (nt == CType.T_err) {
-                pcx.fatalError("左辺の型[" + primary.getCType().toString() + "]に右辺の型["
+                pcx.warning("左辺の型[" + primary.getCType().toString() + "]に右辺の型["
                         + exper.getCType().toString() + "]は代入できません");
             }
 
