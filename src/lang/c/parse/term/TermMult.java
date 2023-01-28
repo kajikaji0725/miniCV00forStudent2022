@@ -50,8 +50,8 @@ public class TermMult extends CParseRule {
 			int rt = right.getCType().getType(); // +の右辺の型
 			int nt = s[lt][rt]; // 規則による型計算
 			if (nt == CType.T_err) {
-				pcx.fatalError(op.toExplainString() + "左辺の型[" + left.getCType().toString() + "]と右辺の型["
-						+ right.getCType().toString() + "]は乗算できません");
+				pcx.warning(op.toExplainString() + "左辺の型[" + left.getCType().toString() + "]と右辺の型["
+						+ right.getCType().toString() + "]は乗算できません :演算結果の保障はできません");
 			}
 			this.setCType(CType.getCType(nt));
 			this.setConstant(left.isConstant() && right.isConstant()); // +の左右両方が定数のときだけ定数

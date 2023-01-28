@@ -27,14 +27,14 @@ public class StatementInput extends CParseRule {
             primary = new Primary(pcx);
             primary.parse(pcx);
         } else {
-            pcx.fatalError(tk.toExplainString() + "StatementInput error");
+            pcx.recoverableError(tk.toExplainString() + "StatementInput error");
         }
 
         tk = ct.getCurrentToken(pcx);
         if (tk.getType() == CToken.TK_SEMI) {
             tk = ct.getNextToken(pcx);
         } else {
-            pcx.fatalError(tk.toExplainString() + "セミコロンが必要");
+            pcx.warning(tk.toExplainString() + "セミコロンが必要 :セミコロンを付け加えました");
         }
     }
 
