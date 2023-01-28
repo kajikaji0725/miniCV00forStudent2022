@@ -2,6 +2,8 @@
 ./lang/c/CParseContext.java
 ./lang/c/CParseRule.java
 ./lang/c/CState.java
+./lang/c/CSymbolTable.java
+./lang/c/CSymbolTableEntry.java
 ./lang/c/CToken.java
 ./lang/c/CTokenizer.java
 ./lang/c/CTokenRule.java
@@ -18,6 +20,12 @@
 ./lang/c/parse/condition/ConditionLT.java
 ./lang/c/parse/condition/ConditionNE.java
 ./lang/c/parse/condition/ConditionTrue.java
+./lang/c/parse/decl/ConstDecl.java
+./lang/c/parse/decl/ConstItem.java
+./lang/c/parse/decl/Declaration.java
+./lang/c/parse/decl/DeclBlock.java
+./lang/c/parse/decl/DeclItem.java
+./lang/c/parse/decl/IntDecl.java
 ./lang/c/parse/exper/Expression.java
 ./lang/c/parse/exper/ExpressionAdd.java
 ./lang/c/parse/exper/ExpressionSub.java
