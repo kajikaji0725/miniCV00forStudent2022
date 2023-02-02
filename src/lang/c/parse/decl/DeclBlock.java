@@ -70,6 +70,8 @@ public class DeclBlock extends CParseRule {
         o.println(";;; DeclBlock starts");
         // 局所変数がなければスタック領域の確保はいらない
         if (address != 0) {
+            o.println("\tMOV\t R4,(R6)+\t; DeclBlock: 旧フレームポインタの退避");
+            o.println("\tMOV\t R6,R4\t; DeclBlock: 新フレームポインタのセット");
             o.println("\tADD\t#" + address + ",R6\t; DeclBlock: 領域の確保");
         }
         for (CParseRule declaration : declarations) {
@@ -80,6 +82,7 @@ public class DeclBlock extends CParseRule {
         }
         if (address != 0) {
             o.println("\tSUB\t#" + address + ",R6\t; DeclBlock: 領域の解放");
+            o.println("\tMOV\t -(R6),R4\t; DeclBlock: フレームポインタを復帰");
         }
         o.println(";;; DeclBlock completes");
     }

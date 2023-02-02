@@ -1,10 +1,12 @@
-const int a = 10000;
+int a;
 {
-  int a;
+  int a, b[100], z;
+  const int c = 1;
   a = 1;
 }
 {
-  const int a = 3;
+  const int d = 3;
+  //z = 32;
 }
 
 // {
